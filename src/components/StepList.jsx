@@ -4,8 +4,7 @@ export default function StepList({ steps }) {
       {steps.length > 0 ? steps.map((step, index) => {
         return (
           <div key={index} className="step-item">
-            <p>Start: {step.start}</p>
-            <p>Koniec: {step.end}</p>
+            <p>Start: {step.start} Koniec: {step.end}</p>
           </div>
         );
       }) : (
