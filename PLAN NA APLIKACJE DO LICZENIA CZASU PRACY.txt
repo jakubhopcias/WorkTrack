@@ -1,0 +1,22 @@
+1. Zliczanie czasu
+	1.1 Dodawanie godziny rozpoczęcia
+	1.2 Dodawanie godziny zakończenia
+	1.2.1 Oznaczanie etapu pracy
+	1.3 Możliwość luźnego dodania czasu
+	1.4 Możliwosc edycji wszystkich rzeczy
+2. Obliczanie wynagrodzenia
+	1.1 Wprowadzanie stawki
+	1.2 Wyświetlanie wynagrodzenia
+3. Wyświetlanie czy praca jest opłacona
+4. Dodawanie i przełączanie się między projektami
+	4.1 Dodawanie nowych projektów
+	4.2 Usuwanie projektów
+	4.3 Foldery
+5. Przechowywanie danych
+	1.1 Przechowywanie projektów w folderach
+	1.2 Nazwa etapu pracy
+	1.3 Czas poświęcony
+	1.4 Godzina rozpoczęcia
+	1.5 Godzina zakończenia
+	1.6 Data
+	1.7 Status
