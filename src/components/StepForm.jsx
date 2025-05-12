@@ -1,42 +1,49 @@
 import React, { useState } from "react";
 
-export default function StepForm({addStep}) {
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
+export default function StepForm({ addStep }) {
+  const [startTime, setStartTime] = useState("");
+  const [name, setName] = useState("");
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [duration, setDuration] = useState(0);
 
-function handleSubmit(e) {
+  function handleTimerToggle(e) {
     e.preventDefault();
-    if (start && end) {
-        const step = { start, end };
-        addStep(step);
-        setStart("");
-        setEnd("");
+    if (!isTimerRunning) {
+      setStartTime(new Date());
+      setIsTimerRunning(true);
     } else {
-        alert("Wypełnij wszystkie pola");
+      const endTime = new Date();
+      const duration = (Math.abs(endTime - startTime) / (1000 * 60 * 60)).toFixed(2)*1;
+      setIsTimerRunning(false);
+      setStartTime("");
+      if (name) {
+        const step = {
+          name,
+          start: startTime.toLocaleTimeString(),
+          end: endTime.toLocaleTimeString(),
+          duration: 0,
+        };
+        setDuration(0);
+        addStep(step);
+        setName("");
+      } else {
+        alert("Wpisz nazwę kroku");
+      }
     }
-}
+  }
   return (
     <form className="step-form">
-      <label htmlFor="start">Start</label>
+      <label htmlFor="start">Nazwa</label>
       <input
-        type="time"
+        type="text"
         id="start"
         placeholder="Start"
         className="step-input"
-        onChange={(e) => setStart(e.target.value)}
-        value={start}
+        onChange={(e) => setName(e.target.value)}
+        value={name}
       />
-      <label htmlFor="end">Koniec</label>
-      <input
-        type="time"
-        id="end"
-        placeholder="Koniec"
-        className="step-input"
-        onChange={(e) => setEnd(e.target.value)}
-        value={end}
-      />
-      <button className="primary-btn" onClick={(e) => handleSubmit(e)}>
-        Dodaj
+      <button className="primary-btn" onClick={handleTimerToggle}>
+        {isTimerRunning ? "Zatrzymaj" : "Start"}
       </button>
     </form>
   );

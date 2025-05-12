@@ -17,12 +17,22 @@ export default function Project() {
         setRate(rate);
         localStorage.setItem("rate", rate);
     }
+    const deleteStep = (index) => {
+        const confirmDelete = window.confirm("Czy na pewno chcesz usunąć ten krok?");
+        if(confirmDelete){
+            const updatedSteps = [...steps];
+            updatedSteps.splice(index, 1);
+            setSteps(updatedSteps);
+            localStorage.setItem("steps", JSON.stringify(updatedSteps));
+        }
+    }
     return (
         <div className="container">
-            <StepList steps={steps}/>
+            <StepList deleteStep={deleteStep} steps={steps}/>
             <Step addStep={addStep}/>
             <RateForm addRate={addRate} />
-            Wynagrodzenie: {calculateTime(steps,rate)} zł
+            <p>Stawka: {localStorage.getItem('rate')}</p>
+            <p>Wynagrodzenie: {calculateTime(steps,rate)} zł</p>
         </div>
         
     );
