@@ -27,7 +27,7 @@ export default function Project() {
         }
     }
     return (
-        <div className="container">
+        <div className="flex flex-col items-center justify-center h-screen">
             <StepList deleteStep={deleteStep} steps={steps}/>
             <Step addStep={addStep}/>
             <RateForm addRate={addRate} />
