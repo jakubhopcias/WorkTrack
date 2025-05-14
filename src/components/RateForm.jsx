@@ -1,4 +1,4 @@
-export default function RateForm({addRate}) {
+export default function RateForm({ addRate }) {
     return (
         <form className="rate-form">
             <label htmlFor="rate">Stawka</label>
@@ -6,7 +6,10 @@ export default function RateForm({addRate}) {
                 type="number"
                 id="rate"
                 placeholder="Stawka"
-                onChange={(e) => addRate(e.target.value)}
+                onChange={(e) => {
+                    const value = Math.max(0, e.target.value); 
+                    addRate(value);
+                }}
             />
         </form>
     );

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import AddFormModal from "./AddFormModal";
 
 export default function StepForm({ addStep }) {
   const [startTime, setStartTime] = useState("");
   const [name, setName] = useState("");
   const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [duration, setDuration] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   function handleTimerToggle(e) {
     e.preventDefault();
@@ -12,39 +13,37 @@ export default function StepForm({ addStep }) {
       setStartTime(new Date());
       setIsTimerRunning(true);
     } else {
-      const endTime = new Date();
-      const duration = (Math.abs(endTime - startTime) / (1000 * 60 * 60)).toFixed(2)*1;
       setIsTimerRunning(false);
-      setStartTime("");
-      if (name) {
-        const step = {
-          name,
-          start: startTime.toLocaleTimeString(),
-          end: endTime.toLocaleTimeString(),
-          duration: 0,
-        };
-        setDuration(0);
-        addStep(step);
-        setName("");
-      } else {
-        alert("Wpisz nazwę kroku");
-      }
+      setIsModalOpen(true);
     }
+  }
+  function handleModalClose(name) {
+    setIsTimerRunning(false);
+    const endTime = new Date();
+    const duration =
+      (Math.floor((endTime - startTime) / (1000 * 60 * 60)).toFixed(2)) * 1;
+    const step = {
+      name: name,
+      startTime: startTime,
+      endTime: endTime,
+      duration: duration,
+    };
+    addStep(step);
+    setStartTime("");
+    setName("");
+    setIsModalOpen(false);
   }
   return (
     <form className="step-form">
-      <label htmlFor="start">Nazwa</label>
-      <input
-        type="text"
-        id="start"
-        placeholder="Start"
-        className="step-input"
-        onChange={(e) => setName(e.target.value)}
-        value={name}
-      />
       <button className="primary-btn" onClick={handleTimerToggle}>
         {isTimerRunning ? "Zatrzymaj" : "Start"}
       </button>
+      {isModalOpen && (
+        <AddFormModal
+          setName={(name) => handleModalClose(name)}
+          closeModal={() => setIsModalOpen(false)}
+        />
+      )}
     </form>
   );
 }
