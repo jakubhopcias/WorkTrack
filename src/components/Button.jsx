@@ -1,6 +1,6 @@
 export default function Button({ text, onClick, className }) {
   const baseClasses = "px-4 py-2 rounded";
-  const primaryClasses = "bg-blue-500 text-white hover:bg-blue-600";
+  const primaryClasses = "!bg-black   hover:bg-blue-600";
   const outlineClasses =
     "border border-blue-500 text-blue-500 hover:bg-blue-100";
 

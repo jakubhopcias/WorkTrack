@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AddFormModal from "./AddFormModal";
+import Button from "./Button";
 
 export default function StepForm({ addStep }) {
   const [startTime, setStartTime] = useState("");
@@ -21,7 +22,7 @@ export default function StepForm({ addStep }) {
     setIsTimerRunning(false);
     const endTime = new Date();
     const duration =
-      (Math.floor((endTime - startTime) / (1000 * 60 * 60)).toFixed(2)) * 1;
+      Math.floor((endTime - startTime) / (1000 * 60 * 60)).toFixed(2) * 1;
     const step = {
       name: name,
       startTime: startTime,
@@ -35,9 +36,12 @@ export default function StepForm({ addStep }) {
   }
   return (
     <form className="step-form">
-      <button className="primary-btn" onClick={handleTimerToggle}>
-        {isTimerRunning ? "Zatrzymaj" : "Start"}
-      </button>
+      <Button
+        className="primary"
+        onClick={handleTimerToggle}
+        text={isTimerRunning ? "Zatrzymaj" : "Start"}
+      />
+
       {isModalOpen && (
         <AddFormModal
           setName={(name) => handleModalClose(name)}
