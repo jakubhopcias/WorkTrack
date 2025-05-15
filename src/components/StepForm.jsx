@@ -1,12 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AddFormModal from "./AddFormModal";
 import Button from "./Button";
+import  formatTime  from "../js/FormatTime";
 
 export default function StepForm({ addStep }) {
   const [startTime, setStartTime] = useState("");
   const [name, setName] = useState("");
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    if (isTimerRunning) {
+      intervalRef.current = setInterval(() => {
+        setTimer((prev) => prev + 1);
+      }, 1000);
+    } else if (isModalOpen) {
+      clearInterval(intervalRef.current);
+    }
+    else {
+      clearInterval(intervalRef.current);
+      setTimer(0);
+    }
+    return () => clearInterval(intervalRef.current);
+  }, [isTimerRunning]);
+
+  
 
   function handleTimerToggle(e) {
     e.preventDefault();
@@ -18,11 +38,11 @@ export default function StepForm({ addStep }) {
       setIsModalOpen(true);
     }
   }
+
   function handleModalClose(name) {
     setIsTimerRunning(false);
     const endTime = new Date();
-    const duration =
-      Math.floor((endTime - startTime) / (1000 * 60 * 60)).toFixed(2) * 1;
+    const duration = (timer / 3600).toFixed(2) * 1; // czas w godzinach
     const step = {
       name: name,
       startTime: startTime,
@@ -34,6 +54,7 @@ export default function StepForm({ addStep }) {
     setName("");
     setIsModalOpen(false);
   }
+
   return (
     <form className="step-form">
       <Button
@@ -41,7 +62,7 @@ export default function StepForm({ addStep }) {
         onClick={handleTimerToggle}
         text={isTimerRunning ? "Zatrzymaj" : "Start"}
       />
-
+      {(isTimerRunning || isModalOpen) && <p>{formatTime(timer)}</p>}
       {isModalOpen && (
         <AddFormModal
           setName={(name) => handleModalClose(name)}

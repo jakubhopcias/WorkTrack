@@ -1,4 +1,4 @@
-import calculateTime from "../js/calculateTime";
+import calculateTime from "../js/calculateSalary";
 import RateForm from "./RateForm";
 import Step from "./StepForm";
 import StepList from "./StepList";
