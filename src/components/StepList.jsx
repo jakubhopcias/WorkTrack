@@ -1,4 +1,4 @@
-export default function StepList({ steps, deleteStep }) {
+export default function StepList({ steps = [], deleteStep }) {
   return (
     <div className="step-list">
       {steps.length > 0 ? steps.map((step, index) => {
@@ -11,9 +11,7 @@ export default function StepList({ steps, deleteStep }) {
             <button className="btn" onClick={() => {deleteStep(index)}}>Usuń</button>
           </div>
         );
-      }) : (
-        <p>Brak zapisów</p>
-      )}
+      }) : <p>Brak kroków</p>}
     </div>
   );
 }
