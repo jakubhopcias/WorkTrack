@@ -42,7 +42,7 @@ export default function Project() {
     }, []);
     return (
         <div className="flex flex-col items-center justify-center h-screen">
-            <StepList deleteStep={deleteStep} steps={steps}/>
+            <StepList deleteStep={deleteStep} steps={steps} hourlyRate={rate}/>
             <Step addStep={addStep}/>
             <RateForm addRate={addRate} />
             <p>Stawka: {rate}</p>
