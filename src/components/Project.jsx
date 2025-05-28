@@ -41,7 +41,7 @@ export default function Project() {
         }
     }, []);
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="mx-7 flex flex-col items-center justify-center h-screen">
             <StepList deleteStep={deleteStep} steps={steps} hourlyRate={rate}/>
             <Step addStep={addStep}/>
             <RateForm addRate={addRate} />
