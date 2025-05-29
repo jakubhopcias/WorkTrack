@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import AddFormModal from "./AddFormModal";
-import Button from "./Button";
-import formatTime from "../js/formatTime";
+import Button from "../../Button";
+import formatTime from "../../../js/formatTime";
 
 export default function StepForm({ addStep }) {
   const [startTime, setStartTime] = useState("");

@@ -1,22 +1,23 @@
-import calculateTime from "../js/calculateSalary";
-import ProjectStats from "./ProjectStats";
-import RateForm from "./RateForm";
-import Step from "./StepForm";
-import StepList from "./StepList";
+"use client"
+import calculateSalary from "@/js/calculateSalary";
+import ProjectStats from "@/components/Project/ProjectStats";
+import RateForm from "@/components/Project/RateForm";
+import Step from "@/components/Project/StepForm/StepForm";
+import StepList from "@/components/Project/StepList";
 import React, { useEffect, useState } from "react";
 
-export default function Project() {
+export default function Project({slug}) {
     const [steps,setSteps] = useState();
     const [rate, setRate] = useState(50);
 
     const addStep = (step) => {
         const updatedSteps = [...steps, step];
         setSteps(updatedSteps);
-        localStorage.setItem("steps", JSON.stringify(updatedSteps));
+        localStorage.setItem(`steps-${slug}`, JSON.stringify(updatedSteps));
     }
     const addRate = (rate) => {
         setRate(rate);
-        localStorage.setItem("rate", rate);
+        localStorage.setItem(`rate-${slug}`, rate);
     }
     const deleteStep = (index) => {
         const confirmDelete = window.confirm("Czy na pewno chcesz usunąć ten krok?");
@@ -24,17 +25,17 @@ export default function Project() {
             const updatedSteps = [...steps];
             updatedSteps.splice(index, 1);
             setSteps(updatedSteps);
-            localStorage.setItem("steps", JSON.stringify(updatedSteps));
+            localStorage.setItem(`steps-${slug}`, JSON.stringify(updatedSteps));
         }
     }
     useEffect(() => {
-        const storedSteps = localStorage.getItem("steps");
+        const storedSteps = localStorage.getItem(`steps-${slug}`);
         if (storedSteps) {
             setSteps(JSON.parse(storedSteps));
         } else {
             setSteps([]);
         }
-        const storedRate = localStorage.getItem("rate");
+        const storedRate = localStorage.getItem(`rate-${slug}`);
         if (storedRate) {
             setRate(storedRate);
         } else {
@@ -48,7 +49,7 @@ export default function Project() {
             <Step addStep={addStep}/>
             <RateForm addRate={addRate} />
             <p>Stawka: {rate}</p>
-            <p>Wynagrodzenie: {calculateTime(steps,rate)} zł</p>
+            <p>Wynagrodzenie: {calculateSalary(steps,rate)} zł</p>
             <StepList deleteStep={deleteStep} steps={steps} hourlyRate={rate}/>
         </div>
         
