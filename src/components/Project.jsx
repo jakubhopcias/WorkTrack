@@ -1,4 +1,5 @@
 import calculateTime from "../js/calculateSalary";
+import ProjectStats from "./ProjectStats";
 import RateForm from "./RateForm";
 import Step from "./StepForm";
 import StepList from "./StepList";
@@ -41,12 +42,14 @@ export default function Project() {
         }
     }, []);
     return (
-        <div className="mx-7 flex flex-col items-center justify-center h-screen">
-            <StepList deleteStep={deleteStep} steps={steps} hourlyRate={rate}/>
+        <div className="mx-7 flex flex-col items-left justify-between h-screen">
+            <ProjectStats project={{name:'Dla Szymona', start:'2025-05-05', duration:"05:50", salary:"5000", rate:50}}/>
+            
             <Step addStep={addStep}/>
             <RateForm addRate={addRate} />
             <p>Stawka: {rate}</p>
             <p>Wynagrodzenie: {calculateTime(steps,rate)} zł</p>
+            <StepList deleteStep={deleteStep} steps={steps} hourlyRate={rate}/>
         </div>
         
     );
