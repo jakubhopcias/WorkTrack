@@ -5,28 +5,41 @@ import RateForm from "@/components/Project/RateForm";
 import Step from "@/components/Project/StepForm/StepForm";
 import StepList from "@/components/Project/StepList";
 import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
-export default function Project({ slug }) {
+export default function Project() {
   const [steps, setSteps] = useState([]);
   const [rate, setRate] = useState(50);
   const [projectIndex, setProjectIndex] = useState(null);
+  const [project, setProject] = useState(null);
+  const { slug } = useParams();
 
-  // Funkcja pomocnicza do aktualizacji projektu w localStorage
   const updateProject = (fields) => {
     const projects = JSON.parse(localStorage.getItem("projects")) || [];
     if (projectIndex !== null) {
-      projects[projectIndex] = {
+      const updatedProject = {
         ...projects[projectIndex],
         ...fields,
       };
+      projects[projectIndex] = updatedProject;
       localStorage.setItem("projects", JSON.stringify(projects));
+      setProject(updatedProject);
     }
+  };
+  const updateSalaryAndDuration = (stepsData, rateValue) => {
+    const salary = calculateSalary(stepsData, rateValue);
+    const duration = stepsData.reduce(
+      (total, step) => total + step.duration,
+      0
+    );
+    updateProject({ salary, duration });
   };
 
   const addStep = (step) => {
     const updatedSteps = [...steps, step];
     setSteps(updatedSteps);
     updateProject({ steps: updatedSteps });
+    updateSalaryAndDuration(updatedSteps, rate);
   };
 
   const deleteStep = (index) => {
@@ -38,6 +51,7 @@ export default function Project({ slug }) {
       updatedSteps.splice(index, 1);
       setSteps(updatedSteps);
       updateProject({ steps: updatedSteps });
+      updateSalaryAndDuration(updatedSteps, rate);
     }
   };
 
@@ -48,31 +62,25 @@ export default function Project({ slug }) {
 
   useEffect(() => {
     const projects = JSON.parse(localStorage.getItem("projects")) || [];
+
     const index = projects.findIndex((p) => p.slug === slug);
     if (index !== -1) {
-      const project = projects[index];
+      const foundProject = projects[index];
+
       setProjectIndex(index);
-      setSteps(project.steps || []);
-      setRate(project.rate || 50);
+      setSteps(foundProject.steps || []);
+      setRate(foundProject.rate || 50);
+      setProject(foundProject);
     }
   }, [slug]);
 
+  if (!project) return <p>Ładowanie projektu...</p>;
+
   return (
     <div className="mx-7 flex flex-col items-left justify-between h-screen">
-      <ProjectStats
-        project={{
-          name: "Dla Szymona",
-          start: "2025-05-05",
-          duration: "05:50",
-          salary: "5000",
-          rate,
-        }}
-      />
+      <ProjectStats project={project} />
 
       <Step addStep={addStep} />
-      <RateForm addRate={addRate} />
-      <p>Stawka: {rate}</p>
-      <p>Wynagrodzenie: {calculateSalary(steps, rate)} zł</p>
       <StepList deleteStep={deleteStep} steps={steps} hourlyRate={rate} />
     </div>
   );

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import formatDate from "@/js/formatDate";
+
 export default function ProjectStats({ project }) {
   return (
     <div className="flex flex-col gap-2">
@@ -11,23 +13,26 @@ export default function ProjectStats({ project }) {
           <p className="small text-[var(--color-dark-gray)]">
             Data rozpoczęcia projektu
           </p>
-          <h5 className="text-[var(--color-primary-1-darker)]">
-            {project.start}
-          </h5>
+          <h6 className="text-[var(--color-primary-1-darker)]">
+            {formatDate(project.creationDate)}
+          </h6>
         </div>
         <div className="stat min-w-40">
           <p className="small text-[var(--color-dark-gray)]">
             Data ostatniego etapu
           </p>
-          <h5 className="text-[var(--color-primary-1-darker)]">
-            {project.start}
-          </h5>
+          <h6 className="text-[var(--color-primary-1-darker)]">
+            {formatDate(
+              project.steps.length > 0 &&
+                project.steps[project.steps.length - 1].startTime
+            )}
+          </h6>
         </div>
         <div className="stat min-w-40">
           <p className="small text-[var(--color-dark-gray)]">Stawka </p>
-          <h5 className="text-[var(--color-primary-1-darker)]">
+          <h6 className="text-[var(--color-primary-1-darker)]">
             {project.rate} PLN / H
-          </h5>
+          </h6>
         </div>
         <div className="stat min-w-40">
           <p className="small text-[var(--color-dark-gray)]">Wynagrodzenie</p>
@@ -41,7 +46,6 @@ export default function ProjectStats({ project }) {
             {project.duration} H
           </h4>
         </div>
-        
       </div>
     </div>
   );

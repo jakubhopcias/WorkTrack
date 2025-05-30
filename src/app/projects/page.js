@@ -3,7 +3,8 @@ import Button from "@/components/Button";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import AddProjectModal from "./components/AddProjectModal";
-import Card from "./components/ProjectCard/Card"
+import Card from "./components/ProjectCard/Card";
+
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);

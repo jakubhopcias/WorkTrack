@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Stat from "./Stat";
+import formatDate from "@/js/formatDate";
 
 export default function Card({ project, deleteProject }) {
   return (
@@ -19,14 +20,14 @@ export default function Card({ project, deleteProject }) {
             <p className="small text-[var(--color-dark-gray)]">
               Data utworzenia
             </p>
-            <p>{project.creationDate.toLocaleString()}</p>
+            <p>{formatDate(project.creationDate)}</p>
           </div>
           <div className="flex flex-col">
             <p className="small text-[var(--color-dark-gray)]">Ostatni etap</p>
             <p>
               {project.steps.length > 0
-                ? project.steps[project.steps.length - 1].startTime
-                : project.creationDate.toLocaleString()}
+                ? formatDate(project.steps[project.steps.length - 1].startTime)
+                : formatDate(project.creationDate.toLocaleString())}
             </p>
           </div>
         </div>
@@ -61,9 +62,9 @@ export default function Card({ project, deleteProject }) {
       </div>
 
       <div className="flex flex-row justify-between p-3 shadow-[-3px_-2px_12.5px_rgba(0,0,0,0.16)] rounded-t-2xl bg-[var(--color-white)] gap-3">
-        <Stat iconPath="rate.svg" name="Stawka" value="50" />
-        <Stat iconPath="wallet.svg" name="Wynagrodzenie" value="500" />
-        <Stat iconPath="timer.svg" name="Czas" value="14:05" />
+        <Stat iconPath="rate.svg" name="Stawka" value={project.rate} />
+        <Stat iconPath="wallet.svg" name="Wynagrodzenie" value={project.salary} />
+        <Stat iconPath="timer.svg" name="Czas" value={project.duration} />
       </div>
     </div>
   );
