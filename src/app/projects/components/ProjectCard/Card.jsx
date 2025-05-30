@@ -5,7 +5,7 @@ export default function Card({ project, deleteProject }) {
   return (
     <div
       key={project.slug}
-      className="card bg-[var(--color-white)] shadow-2xl rounded-2xl overflow-clip"
+      className="card bg-[var(--color-white)] shadow-2xl rounded-2xl overflow-clip "
     >
       <div className="bg-[var(--color-card)] mt-2 mr-2 ml-2 rounded-t-2xl p-6 flex flex-col gap-8">
         <h2 className="capitalize">
@@ -13,10 +13,14 @@ export default function Card({ project, deleteProject }) {
             <a className="hover:underline">{project.name}</a>
           </Link>
         </h2>
-        <p className="text-[var(--color-dark-gray)]">
-          {project.description && project.description}
-        </p>
+
         <div className="flex flex-row justify-between">
+          <div className="flex flex-col">
+            <p className="small text-[var(--color-dark-gray)]">
+              Data utworzenia
+            </p>
+            <p>{project.creationDate.toLocaleString()}</p>
+          </div>
           <div className="flex flex-col">
             <p className="small text-[var(--color-dark-gray)]">Ostatni etap</p>
             <p>
@@ -24,13 +28,6 @@ export default function Card({ project, deleteProject }) {
                 ? project.steps[project.steps.length - 1].startTime
                 : project.creationDate.toLocaleString()}
             </p>
-          </div>
-
-          <div className="flex flex-col">
-            <p className="small text-[var(--color-dark-gray)]">
-              Data utworzenia
-            </p>
-            <p>{project.creationDate.toLocaleString()}</p>
           </div>
         </div>
         <div className="flex flex-row justify-between items-center">
@@ -63,10 +60,10 @@ export default function Card({ project, deleteProject }) {
         </div>
       </div>
 
-      <div className="flex flex-row justify-between p-3 shadow-[-3px_-2px_12.5px_rgba(0,0,0,0.16)] rounded-t-2xl bg-[var(--color-white)]">
-        <Stat iconPath={null} name="Stawka" value="50" />
-        <Stat iconPath={null} name="Wynagrodzenie" value="500" />
-        <Stat iconPath={null} name="Czas" value="14:05" />
+      <div className="flex flex-row justify-between p-3 shadow-[-3px_-2px_12.5px_rgba(0,0,0,0.16)] rounded-t-2xl bg-[var(--color-white)] gap-3">
+        <Stat iconPath="rate.svg" name="Stawka" value="50" />
+        <Stat iconPath="wallet.svg" name="Wynagrodzenie" value="500" />
+        <Stat iconPath="timer.svg" name="Czas" value="14:05" />
       </div>
     </div>
   );

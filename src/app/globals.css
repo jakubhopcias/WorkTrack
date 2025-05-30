@@ -45,7 +45,7 @@ body {
   color: var(--color-foreground);
   background: var(--color-background);
   font-family: 'Inter', sans-serif;
-  padding:5vh 2vw
+  padding:5vh 4vw
 }
 
 .small{
