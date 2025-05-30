@@ -8,7 +8,7 @@
 :root {
   --color-white: #fafafa;
   --color-black: #0e0a01;
-  --color-light-gray: #d5d5d5;
+  --color-light-gray: #dddddd;
   --color-gray: #727168;
   --color-dark-gray: #4a4a46;
 
@@ -26,6 +26,7 @@
   --color-secondary: #f300d2;
   --color-secondary-1-darker: #d70e87;
 
+  --color-card:#DFFEC7;
   font-size:16px;
 }
 /*
@@ -41,8 +42,8 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--color-foreground);
+  background: var(--color-background);
   font-family: 'Inter', sans-serif;
   padding:5vh 2vw
 }
