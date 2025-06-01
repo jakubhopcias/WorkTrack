@@ -90,6 +90,39 @@ h6 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(var(--color-background-rgb), 0.9);
+  background-color: rgba(233,240,228,0.8);
+  backdrop-filter: blur(10px);
   z-index: 50;
+}
+.modal{
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color:var(--color-white);
+  color:var(--color-black);
+  padding:45px;
+  border-radius:16px;
+  box-shadow:0 4px 4px rgba(0,0,0,0.15);
+  gap:2em;
+  position:relative;
+}
+.inputs{
+  display:flex;
+  gap:1em
+}
+
+input{
+    border:3px solid var(--color-black);
+    border-radius:8px;
+    padding:10px 16px;
+}
+input[type="number"]{
+  max-width:120px;
+}
+.close{
+  position:absolute;
+  top:1em;
+  right:1em;
+  cursor: pointer;
+  filter:drop-shadow(0 1px 0 var(--color-black));
 }
