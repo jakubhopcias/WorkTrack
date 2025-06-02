@@ -20,12 +20,11 @@ export default function ProjectStats({ project }) {
         <div className="stat min-w-40">
           <p className="small text-[var(--color-dark-gray)]">
             Data ostatniego etapu
+            {console.log(project)}
           </p>
           <h6 className="text-[var(--color-primary-1-darker)]">
-            {formatDate(
-              project.steps.length > 0 &&
-                project.steps[project.steps.length - 1].startTime
-            )}
+            {formatDate(project.steps?.at(-1)?.startTime)}
+
           </h6>
         </div>
         <div className="stat min-w-40">

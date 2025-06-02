@@ -5,11 +5,13 @@ import React, { useEffect, useState } from "react";
 import AddProjectModal from "./components/AddProjectModal";
 import Card from "./components/ProjectCard/Card";
 import { supabase } from "@/lib/supabase";
+import PlaceholderCard from "@/components/PlaceholderCard";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const addProject = async (project) => {
     const updatedProjects = [...projects, project];
@@ -44,11 +46,12 @@ export default function ProjectsPage() {
         setError("Błąd pobierania projektów, " + error.message);
         return;
       }
-      if (data){
-        setProjects(data)
+      setIsLoading(false);
+      if (data) {
+        setProjects(data);
       }
     }
-  
+
     fetchProjects();
   }, []);
 
@@ -57,7 +60,7 @@ export default function ProjectsPage() {
       addProject({
         name: name,
         slug: name.toLowerCase().replace(/\s+/g, "-"),
-        creationDate: new Date().toISOString(),
+        creation_date: new Date().toISOString(),
         salary: 0,
         rate: rate,
         duration: 0,
@@ -76,7 +79,9 @@ export default function ProjectsPage() {
         />
       </div>
       <div className="projects grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-2">
-        {projects.length > 0 ? (
+        {isLoading ? (
+          Array.from({ length: 6 }).map((_, i) => <PlaceholderCard key={i} />)
+        ) : projects.length > 0 ? (
           projects.map((project) => (
             <Card
               key={project.slug}
@@ -86,7 +91,6 @@ export default function ProjectsPage() {
           ))
         ) : (
           <p>Brak projektów</p>
-          
         )}
         {error && <p>{error}</p>}
       </div>

@@ -7,13 +7,12 @@ import StepList from "@/components/Project/StepList";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import CustomTimeForm from "@/components/Project/CustomTimeForm/CustomTimeForm";
+import {supabase} from "@/lib/supabase"
 
 export default function Project() {
-  const [steps, setSteps] = useState([]);
-  const [rate, setRate] = useState(50);
-  const [projectIndex, setProjectIndex] = useState(null);
   const [project, setProject] = useState(null);
   const { slug } = useParams();
+  const [error,setError]=useState("");
 
   const updateProject = (fields) => {
     const projects = JSON.parse(localStorage.getItem("projects")) || [];
@@ -62,17 +61,20 @@ export default function Project() {
   };
 
   useEffect(() => {
-    const projects = JSON.parse(localStorage.getItem("projects")) || [];
-
-    const index = projects.findIndex((p) => p.slug === slug);
-    if (index !== -1) {
-      const foundProject = projects[index];
-
-      setProjectIndex(index);
-      setSteps(foundProject.steps || []);
-      setRate(foundProject.rate || 50);
-      setProject(foundProject);
+    async function fetchProject(){
+      const {data, error} = await supabase
+      .from("projects").select("*").eq('slug',slug);
+     
+      if(error){
+        setError(error);
+       
+        return;
+      }
+      else{
+        setProject(data[0])
+      }
     }
+    fetchProject()
   }, [slug]);
 
   if (!project) return <p>Ładowanie projektu...</p>;
@@ -80,9 +82,10 @@ export default function Project() {
   return (
     <div className="mx-7 flex flex-col items-left justify-between h-screen gap-4">
       <ProjectStats project={project} />
+      {error && <p>{error}</p>}
       <Step addStep={addStep} />
       <CustomTimeForm addStep={addStep}/>
-      <StepList deleteStep={deleteStep} steps={steps} hourlyRate={rate} />
+      <StepList deleteStep={deleteStep} steps={project.steps} hourlyRate={project.rate} />
     </div>
   );
 }
