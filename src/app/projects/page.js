@@ -4,15 +4,26 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import AddProjectModal from "./components/AddProjectModal";
 import Card from "./components/ProjectCard/Card";
+import { supabase } from "@/lib/supabase";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState("");
 
-  const addProject = (project) => {
+  const addProject = async (project) => {
     const updatedProjects = [...projects, project];
     setProjects(updatedProjects);
-    localStorage.setItem("projects", JSON.stringify(updatedProjects));
+
+    const { data, error } = await supabase.from("projects").insert([project]);
+
+    if (error) {
+      setError("Wystąpił błąd podczas dodawania projektu ", error);
+      return;
+    }
+    if (data) {
+      setProjects(data);
+    }
   };
   const deleteProject = (index) => {
     const confirmDelete = window.confirm(
@@ -26,12 +37,19 @@ export default function ProjectsPage() {
     }
   };
   useEffect(() => {
-    const storedProjects = localStorage.getItem("projects");
-    if (storedProjects) {
-      setProjects(JSON.parse(storedProjects));
-    } else {
-      setProjects([]);
+    async function fetchProjects() {
+      const { data, error } = await supabase.from("projects").select("*");
+
+      if (error) {
+        setError("Błąd pobierania projektów, " + error.message);
+        return;
+      }
+      if (data){
+        setProjects(data)
+      }
     }
+  
+    fetchProjects();
   }, []);
 
   function handleModalClose(name, rate) {
@@ -39,7 +57,7 @@ export default function ProjectsPage() {
       addProject({
         name: name,
         slug: name.toLowerCase().replace(/\s+/g, "-"),
-        creationDate: new Date(),
+        creationDate: new Date().toISOString(),
         salary: 0,
         rate: rate,
         duration: 0,
@@ -68,7 +86,9 @@ export default function ProjectsPage() {
           ))
         ) : (
           <p>Brak projektów</p>
+          
         )}
+        {error && <p>{error}</p>}
       </div>
       {isModalOpen && (
         <AddProjectModal

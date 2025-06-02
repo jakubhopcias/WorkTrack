@@ -27,7 +27,7 @@ export default function Card({ project, deleteProject }) {
             <p className="min-h-[48px]">
               {project.steps.length > 0
                 ? formatDate(project.steps[project.steps.length - 1].startTime)
-                : formatDate(project.creationDate.toLocaleString())}
+                : formatDate(project.creationDate)}
             </p>
           </div>
         </div>
