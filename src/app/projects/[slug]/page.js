@@ -6,6 +6,7 @@ import Step from "@/components/Project/StepForm/StepForm";
 import StepList from "@/components/Project/StepList";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import CustomTimeForm from "@/components/Project/CustomTimeForm/CustomTimeForm";
 
 export default function Project() {
   const [steps, setSteps] = useState([]);
@@ -77,10 +78,10 @@ export default function Project() {
   if (!project) return <p>Ładowanie projektu...</p>;
 
   return (
-    <div className="mx-7 flex flex-col items-left justify-between h-screen">
+    <div className="mx-7 flex flex-col items-left justify-between h-screen gap-4">
       <ProjectStats project={project} />
-
       <Step addStep={addStep} />
+      <CustomTimeForm addStep={addStep}/>
       <StepList deleteStep={deleteStep} steps={steps} hourlyRate={rate} />
     </div>
   );

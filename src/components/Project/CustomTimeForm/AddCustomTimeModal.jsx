@@ -1,12 +1,16 @@
 import { useState } from "react";
 
-export default function AddFormModal({ setName, closeModal }) {
+export default function AddCustomTimeModal({ setStep }) {
   const [tempName, setTempName] = useState("");
+  const [tempDate, setTempDate] = useState("");
+  const [tempDuration, setTempDuration] = useState(0);
   const [error, setError] = useState("");
+
   return (
     <div className="modal-container">
       <div className="modal">
-        <svg onClick={()=>setName()}
+        <svg
+          onClick={() => setStep()}
           width="20"
           height="20"
           viewBox="0 0 20 20"
@@ -30,16 +34,29 @@ export default function AddFormModal({ setName, closeModal }) {
           className="step-input"
           onChange={(e) => setTempName(e.target.value)}
         />
+        <input
+          type="datetime-local"
+          id="startDate"
+          placeholder="Data rozpoczęcia"
+          className="step-input"
+          onChange={(e) => setTempDate(e.target.value)}
+        />
+        <input
+          type="number"
+          id="duration"
+          placeholder="Czas trwania"
+          className="step-input"
+          onChange={(e) => setTempDuration(e.target.value)}
+        />
         <button
           className="btn"
           onClick={(e) => {
             e.preventDefault();
-            if (tempName === "") {
-              setError("Nazwa nie może być pusta");
+            if (tempName === "" || tempDate==="" || tempDuration<0) {
+              setError("Pola nie mogą być puste");
               return;
             } else {
-              setName(tempName);
-              closeModal();
+              setStep(tempName,tempDate,tempDuration);
             }
           }}
         >

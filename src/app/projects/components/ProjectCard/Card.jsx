@@ -23,8 +23,8 @@ export default function Card({ project, deleteProject }) {
             <p>{formatDate(project.creationDate)}</p>
           </div>
           <div className="flex flex-col">
-            <p className="small text-[var(--color-dark-gray)]">Ostatni etap</p>
-            <p>
+            <p className=" small text-[var(--color-dark-gray)]">Ostatni etap</p>
+            <p className="min-h-[48px]">
               {project.steps.length > 0
                 ? formatDate(project.steps[project.steps.length - 1].startTime)
                 : formatDate(project.creationDate.toLocaleString())}
@@ -61,7 +61,7 @@ export default function Card({ project, deleteProject }) {
         </div>
       </div>
 
-      <div className="flex flex-row justify-between p-3 shadow-[-3px_-2px_12.5px_rgba(0,0,0,0.16)] rounded-t-2xl bg-[var(--color-white)] gap-3">
+      <div className="flex flex-row justify-between p-3 shadow-[-3px_-2px_12.5px_rgba(0,0,0,0.16)] rounded-t-2xl bg-[var(--color-white)] gap-1">
         <Stat iconPath="rate.svg" name="Stawka" value={project.rate} />
         <Stat iconPath="wallet.svg" name="Wynagrodzenie" value={project.salary} />
         <Stat iconPath="timer.svg" name="Czas" value={project.duration} />

@@ -49,7 +49,7 @@ export default function ProjectsPage() {
   }
   return (
     <div className="flex flex-col gap-16 min-h-[80vh] justify-center">
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-row justify-between items-center flex-wrap gap-2">
         <h1>Twoje projekty</h1>
         <Button
           className="primary"
