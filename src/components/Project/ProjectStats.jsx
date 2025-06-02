@@ -14,16 +14,15 @@ export default function ProjectStats({ project }) {
             Data rozpoczęcia projektu
           </p>
           <h6 className="text-[var(--color-primary-1-darker)]">
-            {formatDate(project.creationDate)}
+            {formatDate(project.creation_date)}
           </h6>
         </div>
         <div className="stat min-w-40">
           <p className="small text-[var(--color-dark-gray)]">
             Data ostatniego etapu
-            {console.log(project)}
           </p>
           <h6 className="text-[var(--color-primary-1-darker)]">
-            {formatDate(project.steps?.at(-1)?.startTime)}
+            {project.steps.length>0 ? formatDate(project.creation_date) : ("Brak etapów")}
 
           </h6>
         </div>

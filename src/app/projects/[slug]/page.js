@@ -7,39 +7,46 @@ import StepList from "@/components/Project/StepList";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import CustomTimeForm from "@/components/Project/CustomTimeForm/CustomTimeForm";
-import {supabase} from "@/lib/supabase"
+import { supabase } from "@/lib/supabase";
 
 export default function Project() {
   const [project, setProject] = useState(null);
   const { slug } = useParams();
-  const [error,setError]=useState("");
+  const [error, setError] = useState("");
 
-  const updateProject = (fields) => {
-    const projects = JSON.parse(localStorage.getItem("projects")) || [];
-    if (projectIndex !== null) {
-      const updatedProject = {
-        ...projects[projectIndex],
-        ...fields,
-      };
-      projects[projectIndex] = updatedProject;
-      localStorage.setItem("projects", JSON.stringify(projects));
-      setProject(updatedProject);
+  async function updateProjectInDb(fields) {
+    const { data, error } = await supabase
+      .from("projects")
+      .update(fields)
+      .eq("slug", slug);
+
+    if (error) {
+      setError(error.message);
     }
+  }
+
+  const updateProjectLocal = (fields) => {
+    setProject((prev) => {
+      const updatedProject = { ...prev, ...fields };
+      updateProjectInDb(fields);
+      return updatedProject;
+    });
   };
-  const updateSalaryAndDuration = (stepsData, rateValue) => {
-    const salary = calculateSalary(stepsData, rateValue);
-    const duration = stepsData.reduce(
+
+  const updateSalaryAndDuration = () => {
+    const salary = calculateSalary(project.steps, project.rate);
+    const duration = project.steps.reduce(
       (total, step) => total + step.duration,
       0
     );
-    updateProject({ salary, duration });
+    updateProjectLocal({ salary, duration });
   };
 
   const addStep = (step) => {
-    const updatedSteps = [...steps, step];
-    setSteps(updatedSteps);
-    updateProject({ steps: updatedSteps });
-    updateSalaryAndDuration(updatedSteps, rate);
+    const updatedSteps = [...project.steps, step];
+    updateProjectLocal({ steps: updatedSteps });
+
+    updateSalaryAndDuration();
   };
 
   const deleteStep = (index) => {
@@ -47,34 +54,34 @@ export default function Project() {
       "Czy na pewno chcesz usunąć ten krok?"
     );
     if (confirmDelete) {
-      const updatedSteps = [...steps];
+      const updatedSteps = [...project.steps];
       updatedSteps.splice(index, 1);
-      setSteps(updatedSteps);
-      updateProject({ steps: updatedSteps });
-      updateSalaryAndDuration(updatedSteps, rate);
+      updateProjectLocal({ steps: updatedSteps });
+      updateSalaryAndDuration();
     }
   };
 
   const addRate = (newRate) => {
-    setRate(newRate);
-    updateProject({ rate: newRate });
+    updateProjectLocal({ rate: newRate });
+    updateSalaryAndDuration();
   };
 
   useEffect(() => {
-    async function fetchProject(){
-      const {data, error} = await supabase
-      .from("projects").select("*").eq('slug',slug);
-     
-      if(error){
+    async function fetchProject() {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .eq("slug", slug);
+
+      if (error) {
         setError(error);
-       
+
         return;
-      }
-      else{
-        setProject(data[0])
+      } else {
+        setProject(data[0]);
       }
     }
-    fetchProject()
+    fetchProject();
   }, [slug]);
 
   if (!project) return <p>Ładowanie projektu...</p>;
@@ -84,8 +91,12 @@ export default function Project() {
       <ProjectStats project={project} />
       {error && <p>{error}</p>}
       <Step addStep={addStep} />
-      <CustomTimeForm addStep={addStep}/>
-      <StepList deleteStep={deleteStep} steps={project.steps} hourlyRate={project.rate} />
+      <CustomTimeForm addStep={addStep} />
+      <StepList
+        deleteStep={deleteStep}
+        steps={project.steps}
+        hourlyRate={project.rate}
+      />
     </div>
   );
 }
