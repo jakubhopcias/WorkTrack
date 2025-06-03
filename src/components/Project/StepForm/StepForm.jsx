@@ -35,7 +35,6 @@ export default function StepForm({ addStep }) {
   }
 
   function handleModalClose(name) {
-    
     if (name) {
       setIsTimerRunning(false);
       const endTime = new Date();
@@ -44,17 +43,15 @@ export default function StepForm({ addStep }) {
         name: name,
         startTime: startTime,
         endTime: endTime,
-        duration: Math.round((duration*100)/100),
+        duration: Math.round((duration * 100) / 100),
       };
       addStep(step);
-      setStartTime("");
-      setName("");
-      setIsModalOpen(false);
-      setTimer(0);
-      clearInterval(intervalRef.current);
+      clearConsts();
+    } else {
+      clearConsts();
     }
-    else{
-      setIsTimerRunning(false);
+
+    function clearConsts() {
       setStartTime("");
       setName("");
       setIsModalOpen(false);

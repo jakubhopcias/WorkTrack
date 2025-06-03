@@ -82,7 +82,10 @@ export default function Project() {
       }
     }
     fetchProject();
-  }, [slug]);
+    if (project) {
+      updateSalaryAndDuration();
+    }
+  }, [slug, project?.steps, project?.rate]);
 
   if (!project) return <p>Ładowanie projektu...</p>;
 

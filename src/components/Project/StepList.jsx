@@ -42,7 +42,7 @@ export default function StepList({ steps = [], deleteStep, hourlyRate }) {
                         Wynagrodzenie
                       </p>
                       <div className="flex gap-2 items-end">
-                        <h5>{step.duration * hourlyRate}</h5>
+                        <h5>{Math.round((step.duration * hourlyRate)*100)/100}</h5>
                         <p className="small"> pln</p>
                       </div>
                     </div>

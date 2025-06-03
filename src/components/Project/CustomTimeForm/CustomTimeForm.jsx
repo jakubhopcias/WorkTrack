@@ -18,7 +18,6 @@ export default function CustomTimeForm({ addStep }) {
       endTime: new Date(startDate.getTime() + duration * 60000),
       duration: Math.round((duration / 60) * 100) / 100,
     };
-
     addStep(step);
     setIsModalOpen(false);
   }
