@@ -90,11 +90,12 @@ export default function Project() {
   if (!project) return <p>Ładowanie projektu...</p>;
 
   return (
+
     <div className="outer-container mx-7 flex flex-col items-left justify-between h-screen gap-4">
       <ProjectStats project={project} />
       {error && <p>{error}</p>}
-      <Step addStep={addStep} />
-      <CustomTimeForm addStep={addStep} />
+      <Step addStep={addStep} project={project.project_id}/>
+      <CustomTimeForm addStep={addStep} project={project.project_id}/>
       <StepList
         deleteStep={deleteStep}
         steps={project.steps}

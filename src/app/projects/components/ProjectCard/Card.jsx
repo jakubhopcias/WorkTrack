@@ -6,7 +6,7 @@ export default function Card({ project, deleteProject }) {
   return (
     <div
       key={project.slug}
-      className="card bg-[var(--color-white)] shadow-2xl rounded-2xl overflow-clip "
+      className="card bg-[var(--color-white)] shadow-2xl rounded-2xl overflow-clip max-w-[800px]"
     >
       <div className="bg-[var(--color-card)] mt-2 mr-2 ml-2 rounded-t-2xl p-6 flex flex-col gap-8">
         <h2 className="capitalize">
@@ -25,16 +25,17 @@ export default function Card({ project, deleteProject }) {
           <div className="flex flex-col">
             <p className=" small text-[var(--color-dark-gray)]">Ostatni etap</p>
             <p className="min-h-[48px]">
-              {project.steps.length > 0
+             
+              { /*project.steps.length > 0
                 ? formatDate(project.steps[project.steps.length - 1].startTime)
-                : formatDate(project.creationDate)}
+                : formatDate(project.creationDate)*/}
             </p>
           </div>
         </div>
         <div className="flex flex-row justify-between items-center">
           <button
             onClick={() => {
-              deleteProject(project.slug);
+              deleteProject(project.project_id);
             }}
             style={{
               backgroundImage: "url('trash.svg')",

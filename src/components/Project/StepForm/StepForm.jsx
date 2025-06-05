@@ -3,7 +3,7 @@ import AddFormModal from "./AddFormModal";
 import Button from "../../Button";
 import formatTime from "../../../js/formatTime";
 
-export default function StepForm({ addStep }) {
+export default function StepForm({ addStep, projectId }) {
   const [startTime, setStartTime] = useState("");
   const [name, setName] = useState("");
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -40,6 +40,7 @@ export default function StepForm({ addStep }) {
       const endTime = new Date();
       const duration = (timer / 3600).toFixed(2) * 1; // czas w godzinach
       const step = {
+        project_id:projectId,
         name: name,
         startTime: startTime,
         endTime: endTime,
