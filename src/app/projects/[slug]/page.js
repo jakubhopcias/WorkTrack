@@ -5,14 +5,16 @@ import RateForm from "@/components/Project/RateForm";
 import Step from "@/components/Project/StepForm/StepForm";
 import StepList from "@/components/Project/StepList";
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import CustomTimeForm from "@/components/Project/CustomTimeForm/CustomTimeForm";
 import { supabase } from "@/lib/supabase";
 
 export default function Project() {
   const [project, setProject] = useState(null);
-  const { slug } = useParams();
+  const [steps, setSteps] = useState([]);
   const [error, setError] = useState("");
+  const { slug } = useParams();
+  const projectId = useSearchParams().get("id");
 
   async function updateProjectInDb(fields) {
     const { data, error } = await supabase
@@ -22,83 +24,120 @@ export default function Project() {
 
     if (error) {
       setError(error.message);
+      return null;
     }
+    return data;
   }
 
-  const updateProjectLocal = (fields) => {
-    setProject((prev) => {
-      const updatedProject = { ...prev, ...fields };
-      updateProjectInDb(fields);
-      return updatedProject;
-    });
+  // Pobierz projekt z bazy
+  async function fetchProject() {
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("project_id", projectId)
+      .single();
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    setProject(data);
+  }
+
+  // Pobierz kroki projektu z bazy
+  async function fetchSteps() {
+    const { data, error } = await supabase
+      .from("steps")
+      .select("*")
+      .eq("project_id", projectId)
+      .order("id", { ascending: true });
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    setSteps(data);
+  }
+
+  async function updateSalaryAndDuration(customSteps = steps) {
+    const salary = calculateSalary(customSteps, project.rate);
+    const duration = customSteps.reduce((total, step) => total + step.duration, 0);
+
+    await updateProjectInDb({ salary, duration });
+
+    setProject((prev) => ({ ...prev, salary, duration }));
+  }
+
+  const addStep = async (step) => {
+    const { data, error } = await supabase
+      .from("steps")
+      .insert([{ ...step, project_id: project.project_id }]);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    await fetchSteps();
+
+    await updateSalaryAndDuration();
   };
 
-  const updateSalaryAndDuration = () => {
-    const salary = calculateSalary(project.steps, project.rate);
-    const duration = project.steps.reduce(
-      (total, step) => total + step.duration,
-      0
-    );
-    updateProjectLocal({ salary, duration });
-  };
+  // Usuń krok z bazy i odśwież listę kroków i projekt
+  const deleteStep = async (index) => {
+    const stepToDelete = steps[index];
+    if (!stepToDelete?.id) {
+      setError("Brak id kroku do usunięcia");
+      return;
+    }
 
-  const addStep = (step) => {
-    const updatedSteps = [...project.steps, step];
-    updateProjectLocal({ steps: updatedSteps });
-
-    updateSalaryAndDuration();
-  };
-
-  const deleteStep = (index) => {
     const confirmDelete = window.confirm(
       "Czy na pewno chcesz usunąć ten krok?"
     );
-    if (confirmDelete) {
-      const updatedSteps = [...project.steps];
-      updatedSteps.splice(index, 1);
-      updateProjectLocal({ steps: updatedSteps });
-      updateSalaryAndDuration();
+    if (!confirmDelete) return;
+
+    const { error } = await supabase
+      .from("steps")
+      .delete()
+      .eq("id", stepToDelete.id);
+
+    if (error) {
+      setError(error.message);
+      return;
     }
+
+    const updatedSteps = [...steps];
+    updatedSteps.splice(index, 1);
+    setSteps(updatedSteps);
+    updateSalaryAndDuration(updatedSteps);
   };
 
-  const addRate = (newRate) => {
-    updateProjectLocal({ rate: newRate });
-    updateSalaryAndDuration();
+  // Aktualizuj stawkę i potem salary i duration
+  const addRate = async (newRate) => {
+    await updateProjectInDb({ rate: newRate });
+    setProject((prev) => ({ ...prev, rate: newRate }));
+
+    await updateSalaryAndDuration(steps, newRate);
   };
 
   useEffect(() => {
-    async function fetchProject() {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .eq("slug", slug);
-
-      if (error) {
-        setError(error);
-
-        return;
-      } else {
-        setProject(data[0]);
-      }
-    }
+    if (!projectId) return;
     fetchProject();
-    if (project) {
-      updateSalaryAndDuration();
-    }
-  }, [slug, project?.steps, project?.rate]);
+    fetchSteps();
+  }, [projectId]);
 
   if (!project) return <p>Ładowanie projektu...</p>;
 
   return (
-
     <div className="outer-container mx-7 flex flex-col items-left justify-between h-screen gap-4">
       <ProjectStats project={project} />
-      {error && <p>{error}</p>}
-      <Step addStep={addStep} project={project.project_id}/>
-      <CustomTimeForm addStep={addStep} project={project.project_id}/>
+      {error && <p className="text-red-600">{error}</p>}
+      <RateForm addRate={addRate} currentRate={project.rate} />
+      <Step addStep={addStep} project={project.project_id} />
+      <CustomTimeForm addStep={addStep} project={project.project_id} />
       <StepList
-        deleteStep={deleteStep}
-        steps={project.steps}
+        deleteStep={(step) => deleteStep(step)}
+        steps={steps}
         hourlyRate={project.rate}
       />
     </div>

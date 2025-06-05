@@ -22,7 +22,7 @@ export default function ProjectStats({ project }) {
             Data ostatniego etapu
           </p>
           <h6 className="text-[var(--color-primary-1-darker)]">
-            {project.steps.length>0 ? formatDate(project.steps[project.steps.length-1].startTime) : ("Brak etapów")}
+           
 
           </h6>
         </div>
