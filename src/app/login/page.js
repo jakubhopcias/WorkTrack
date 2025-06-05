@@ -1,7 +1,9 @@
-"use client"
+"use client";
 import { useState } from "react";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm;";
+import Style from "./login-styles.css"
+
 export default function LoginPage() {
   const [step, setStep] = useState("login");
 
@@ -11,17 +13,17 @@ export default function LoginPage() {
         return <LoginForm onSwitch={setStep} />;
       case "signup":
         return <SignUpForm onSwitch={setStep} />;
-      case "reset":
-        return <ResetForm onSwitch={setStep} />;
       default:
         return <LoginForm onSwitch={setStep} />;
     }
   };
 
   return (
-    <div>
-      <h1>Autoryzacja</h1>
-      {renderStep()}
+    <div className="w-full min-h-screen flex justify-center items-center">
+      <div>
+        <h1>WorkTrack</h1>
+        {renderStep()}
+      </div>
     </div>
   );
 }

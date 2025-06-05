@@ -6,12 +6,14 @@ import AddProjectModal from "./components/AddProjectModal";
 import Card from "./components/ProjectCard/Card";
 import { supabase } from "@/lib/supabase";
 import PlaceholderCard from "@/components/PlaceholderCard";
+import {UserProvider, useUser } from '@/app/UserContext'
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const user = useUser()
 
   const addProject = async (project) => {
     const updatedProjects = [...projects, project];
@@ -40,7 +42,7 @@ export default function ProjectsPage() {
   };
   useEffect(() => {
     async function fetchProjects() {
-      const { data, error } = await supabase.from("projects").select("*");
+      const { data, error } = await supabase.from("projects").select("*").eq('user_id',user.id);
 
       if (error) {
         setError("Błąd pobierania projektów, " + error.message);
@@ -51,7 +53,7 @@ export default function ProjectsPage() {
         setProjects(data);
       }
     }
-
+    
     fetchProjects();
   }, []);
 
@@ -69,37 +71,39 @@ export default function ProjectsPage() {
     }
   }
   return (
-    <div className="flex flex-col gap-16 min-h-[80vh] justify-center">
-      <div className="flex flex-row justify-between items-center flex-wrap gap-2">
-        <h1>Twoje projekty</h1>
-        <Button
-          className="primary"
-          text="Dodaj"
-          onClick={() => setIsModalOpen(true)}
-        />
-      </div>
-      <div className="projects grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-2">
-        {isLoading ? (
-          Array.from({ length: 6 }).map((_, i) => <PlaceholderCard key={i} />)
-        ) : projects.length > 0 ? (
-          projects.map((project) => (
-            <Card
-              key={project.slug}
-              project={project}
-              deleteProject={deleteProject}
-            />
-          ))
-        ) : (
-          <p>Brak projektów</p>
+    <UserProvider>
+      <div className="outer-container flex flex-col gap-16 min-h-[80vh] justify-center ">
+        <div className="flex flex-row justify-between items-center flex-wrap gap-2">
+          <h1>Twoje projekty</h1>
+          <Button
+            className="primary"
+            text="Dodaj"
+            onClick={() => setIsModalOpen(true)}
+          />
+        </div>
+        <div className="projects grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-2">
+          {isLoading ? (
+            Array.from({ length: 6 }).map((_, i) => <PlaceholderCard key={i} />)
+          ) : projects.length > 0 ? (
+            projects.map((project) => (
+              <Card
+                key={project.slug}
+                project={project}
+                deleteProject={deleteProject}
+              />
+            ))
+          ) : (
+            <p>Brak projektów</p>
+          )}
+          {error && <p>{error}</p>}
+        </div>
+        {isModalOpen && (
+          <AddProjectModal
+            setName={(name, rate) => handleModalClose(name, rate)}
+            closeModal={() => setIsModalOpen(false)}
+          />
         )}
-        {error && <p>{error}</p>}
       </div>
-      {isModalOpen && (
-        <AddProjectModal
-          setName={(name, rate) => handleModalClose(name, rate)}
-          closeModal={() => setIsModalOpen(false)}
-        />
-      )}
-    </div>
+    </UserProvider>
   );
 }

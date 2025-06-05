@@ -45,7 +45,6 @@ body {
   color: var(--color-foreground);
   background: var(--color-background);
   font-family: 'Inter', sans-serif;
-  padding:5vh 4vw
 }
 
 .small{
@@ -125,4 +124,7 @@ input[type="number"]{
   right:1em;
   cursor: pointer;
   filter:drop-shadow(0 1px 0 var(--color-black));
+}
+.outer-container{
+  padding:5vh 5vw;
 }
