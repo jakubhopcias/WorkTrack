@@ -16,19 +16,6 @@ export default function Project() {
   const { slug } = useParams();
   const projectId = useSearchParams().get("id");
 
-  async function updateProjectInDb(fields) {
-    const { data, error } = await supabase
-      .from("projects")
-      .update(fields)
-      .eq("slug", slug);
-
-    if (error) {
-      setError(error.message);
-      return null;
-    }
-    return data;
-  }
-
   // Pobierz projekt z bazy
   async function fetchProject() {
     const { data, error } = await supabase
@@ -59,15 +46,6 @@ export default function Project() {
     setSteps(data);
   }
 
-  async function updateSalaryAndDuration(customSteps = steps) {
-    const salary = calculateSalary(customSteps, project.rate);
-    const duration = customSteps.reduce((total, step) => total + step.duration, 0);
-
-    await updateProjectInDb({ salary, duration });
-
-    setProject((prev) => ({ ...prev, salary, duration }));
-  }
-
   const addStep = async (step) => {
     const { data, error } = await supabase
       .from("steps")
@@ -79,11 +57,9 @@ export default function Project() {
     }
 
     await fetchSteps();
-
-    await updateSalaryAndDuration();
+    await fetchProject();
   };
 
-  // Usuń krok z bazy i odśwież listę kroków i projekt
   const deleteStep = async (index) => {
     const stepToDelete = steps[index];
     if (!stepToDelete?.id) {
@@ -109,15 +85,22 @@ export default function Project() {
     const updatedSteps = [...steps];
     updatedSteps.splice(index, 1);
     setSteps(updatedSteps);
-    updateSalaryAndDuration(updatedSteps);
+    fetchProject();
   };
 
   // Aktualizuj stawkę i potem salary i duration
   const addRate = async (newRate) => {
-    await updateProjectInDb({ rate: newRate });
-    setProject((prev) => ({ ...prev, rate: newRate }));
+    const { data, error } = await supabase
+      .from("projects")
+      .update({ rate: newRate })
+      .eq("slug", slug);
 
-    await updateSalaryAndDuration(steps, newRate);
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    fetchProject();
   };
 
   useEffect(() => {
@@ -133,8 +116,8 @@ export default function Project() {
       <ProjectStats project={project} />
       {error && <p className="text-red-600">{error}</p>}
       <RateForm addRate={addRate} currentRate={project.rate} />
-      <Step addStep={addStep} project={project.project_id} />
-      <CustomTimeForm addStep={addStep} project={project.project_id} />
+      <Step addStep={addStep} project={project.project_id} rate={project.rate} />
+      <CustomTimeForm addStep={addStep} project={project.project_id} rate={project.rate} />
       <StepList
         deleteStep={(step) => deleteStep(step)}
         steps={steps}

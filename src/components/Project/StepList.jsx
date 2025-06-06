@@ -22,7 +22,7 @@ export default function StepList({ steps = [], deleteStep, hourlyRate }) {
                   {step.name}
                 </div>
                 <div className="relative before:z-10 before:content-['']  before:absolute before:w-1/2 before:h-3/4 before:bottom-0 before:-left-[calc(50%-3px)] before:rounded-br-2xl before:shadow-[3px_3px_0_var(--color-primary-3-lighter)] before:g ml-auto max-w-[50%]  rounded-tr-2xl rounded-tl-2xl py-3 px-4 w-fit bg-[var(--color-primary-3-lighter)] small text-[var(--color-dark-gray)]">
-                  {new Date(step.startTime).toLocaleDateString([], {
+                  {new Date(step.start_time).toLocaleDateString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}

@@ -22,6 +22,11 @@ export default function ProjectStats({ project }) {
             Data ostatniego etapu
           </p>
           <h6 className="text-[var(--color-primary-1-darker)]">
+            {project.last_step ? 
+                             formatDate(project.last_step)
+                            : "Brak kroków"}
+          </h6>
+          <h6 className="text-[var(--color-primary-1-darker)]">
            
 
           </h6>

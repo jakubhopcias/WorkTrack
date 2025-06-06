@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import { useState } from "react";
 import AddCustomTimeModal from "./AddCustomTimeModal";
 
-export default function CustomTimeForm({ addStep, projectId }) {
+export default function CustomTimeForm({ addStep, projectId, rate }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function handleModalClose(name, start, duration) {
@@ -10,14 +10,18 @@ export default function CustomTimeForm({ addStep, projectId }) {
       setIsModalOpen(false);
       return;
     }
+    const startDate = new Date(start);
 
-    const startDate = new Date(start); // <- KONWERSJA tu
+    const endTime = new Date(startDate.getTime() + duration * 60000);
+    duration = (duration / 60).toFixed(2) * 1;
+
     const step = {
-      project_id:projectId,
+      project_id: projectId,
       name,
-      startTime: startDate,
-      endTime: new Date(startDate.getTime() + duration * 60000),
-      duration: Math.round((duration / 60) * 100) / 100,
+      start_time: startDate,
+      end_time: endTime,
+      duration: duration,
+      salary: rate * duration,
     };
     addStep(step);
     setIsModalOpen(false);

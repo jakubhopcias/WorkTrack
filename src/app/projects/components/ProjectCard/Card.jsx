@@ -26,14 +26,14 @@ export default function Card({ project, deleteProject }) {
             <p className="small text-[var(--color-dark-gray)]">
               Data utworzenia
             </p>
-            <p>{formatDate(project.creationDate)}</p>
+            <p>{formatDate(project.creation_date)}</p>
           </div>
           <div className="flex flex-col">
             <p className=" small text-[var(--color-dark-gray)]">Ostatni etap</p>
             <p className="min-h-[48px]">
-              {/*project.steps.length > 0
-                ? formatDate(project.steps[project.steps.length - 1].startTime)
-                : formatDate(project.creationDate)*/}
+              {project.last_step ? 
+                 formatDate(project.last_step)
+                : "Brak kroków"}
             </p>
           </div>
         </div>

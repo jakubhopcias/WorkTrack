@@ -3,7 +3,7 @@ import AddFormModal from "./AddFormModal";
 import Button from "../../Button";
 import formatTime from "../../../js/formatTime";
 
-export default function StepForm({ addStep, projectId }) {
+export default function StepForm({ addStep, projectId, rate }) {
   const [startTime, setStartTime] = useState("");
   const [name, setName] = useState("");
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -42,9 +42,10 @@ export default function StepForm({ addStep, projectId }) {
       const step = {
         project_id:projectId,
         name: name,
-        startTime: startTime,
-        endTime: endTime,
-        duration: Math.round((duration * 100) / 100),
+        start_time: startTime,
+        end_time: endTime,
+        salary:duration*rate,
+        duration: duration,
       };
       addStep(step);
       clearConsts();
