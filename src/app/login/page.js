@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import LoginForm from "./LoginForm";
-import SignUpForm from "./SignUpForm;";
+import SignUpForm from "./SignUpForm";
 import Style from "./login-styles.css"
 import { useUser } from "../UserContext";
 import { useRouter } from "next/navigation";
@@ -30,6 +30,7 @@ export default function LoginPage() {
       <div>
         <h1>WorkTrack</h1>
         {renderStep()}
+      
       </div>
     </div>
   );

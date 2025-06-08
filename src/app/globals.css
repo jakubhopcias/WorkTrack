@@ -33,14 +33,14 @@
 {
   transition:0.3s;
 }
-  */
+ 
 @media (prefers-color-scheme: dark) {
   :root {
     --color-foreground: var(--color-white);
     --color-background: var(--color-black);
   }
 }
-
+ */
 body {
   color: var(--color-foreground);
   background: var(--color-background);

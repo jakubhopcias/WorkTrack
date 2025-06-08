@@ -16,7 +16,7 @@ export default function Profil() {
     if (error) {
       setError(error);
     } else {
-      router.push("/");
+      router.push("/login");
     }
 
   }
