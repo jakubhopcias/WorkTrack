@@ -7,7 +7,6 @@ export default function SignUpForm({ onSwitch }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [insertError, setInsertError] = useState(null)
   const [success, setSuccess] = useState(null);
 
   const hadnleSignUp = async (e) => {
@@ -24,17 +23,7 @@ export default function SignUpForm({ onSwitch }) {
     } else {
       setSuccess("Rejestracja zakończona. Sprawdź skrzynkę pocztową.");
     }
-    
-    const user = data?.user;
-    console.log(user)
-    if (user) {
-      const { error: insertError } = await supabase.from("users").insert([{
-        userID:user.id,
-      }]);
-      if(insertError){
-        setInsertError(insertError);
-      }
-    }
+
   };
 
   return (
@@ -53,7 +42,7 @@ export default function SignUpForm({ onSwitch }) {
         placeholder="Hasło"
       />
       {error && <p>{error}</p>}
-      {insertError && <p>{insertError}</p>}
+
       {success && <p>{success}</p>}
       <Button className="primary" type="submit" text="Zarejestruj się"></Button>
       <p>

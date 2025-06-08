@@ -3,10 +3,17 @@ import { useState } from "react";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm;";
 import Style from "./login-styles.css"
+import { useUser } from "../UserContext";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [step, setStep] = useState("login");
+  const user= useUser()
+  const router=useRouter();
 
+  if(user){
+    router.push("/projekty")
+  }
   const renderStep = () => {
     switch (step) {
       case "login":

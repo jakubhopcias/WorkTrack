@@ -7,6 +7,7 @@ import Card from "./components/ProjectCard/Card";
 import { supabase } from "@/lib/supabase";
 import PlaceholderCard from "@/components/PlaceholderCard";
 import { useUser } from "@/app/UserContext";
+import { useRouter } from "next/navigation";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -14,6 +15,7 @@ export default function ProjectsPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const user = useUser();
+  const router = useRouter();
 
   const addProject = async (project) => {
     const updatedProjects = [...projects, project];
@@ -33,7 +35,7 @@ export default function ProjectsPage() {
     const confirmDelete = window.confirm(
       "Czy na pewno chcesz usunąć ten projekt?"
     );
-    if (!confirmDelete) return; 
+    if (!confirmDelete) return;
 
     const { data, error } = await supabase
       .from("projects")
@@ -84,12 +86,15 @@ export default function ProjectsPage() {
         setProjects(data);
       }
     }
+    if (!user) {
+      router.push("/login");
+    }
 
     fetchProjects();
-  }, [user,projects]);
+  }, [user, projects]);
 
   return (
-    <div className="outer-container flex flex-col gap-16 min-h-[80vh] justify-center ">
+    <div className="outer-container flex flex-col gap-16 min-h-[80vh] justify-start ">
       <div className="flex flex-row justify-between items-center flex-wrap gap-2">
         <h1>Twoje projekty</h1>
         <Button

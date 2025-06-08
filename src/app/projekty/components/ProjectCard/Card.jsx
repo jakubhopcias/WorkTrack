@@ -13,7 +13,7 @@ export default function Card({ project, deleteProject }) {
           <Link
             legacyBehavior
             href={{
-              pathname: `/projects/${project.slug}`,
+              pathname: `/projekty/${project.slug}`,
               query: { id: project.project_id },
             }}
           >
@@ -33,7 +33,7 @@ export default function Card({ project, deleteProject }) {
             <p className="min-h-[48px]">
               {project.last_step ? 
                  formatDate(project.last_step)
-                : "Brak kroków"}
+                : "Brak etapów"}
             </p>
           </div>
         </div>
@@ -55,7 +55,7 @@ export default function Card({ project, deleteProject }) {
           <Link
             legacyBehavior
             href={{
-              pathname: `/projects/${project.slug}`,
+              pathname: `/projekty/${project.slug}`,
               query: { id: project.project_id },
             }}
           >

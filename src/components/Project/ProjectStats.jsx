@@ -4,7 +4,7 @@ import formatDate from "@/js/formatDate";
 export default function ProjectStats({ project }) {
   return (
     <div className="flex flex-col gap-2">
-      <Link className="link" href={`/projects`}>
+      <Link className="link" href={`/projekty`}>
         {"<"}-- Wszystkie projekty
       </Link>
       <h3>{project.name}</h3>
@@ -24,7 +24,7 @@ export default function ProjectStats({ project }) {
           <h6 className="text-[var(--color-primary-1-darker)]">
             {project.last_step ? 
                              formatDate(project.last_step)
-                            : "Brak kroków"}
+                            : "Brak etapów"}
           </h6>
           <h6 className="text-[var(--color-primary-1-darker)]">
            

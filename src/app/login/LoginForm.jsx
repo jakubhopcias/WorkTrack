@@ -26,7 +26,7 @@ export default function LoginForm({ onSwitch }) {
       setError(error.message);
     } else {
       setSuccess("Zalogowano pomyślnie!");
-      router.push("/projects"); // <-- przekierowanie po zalogowaniu
+      router.push("/projekty"); 
       
     }
   };
