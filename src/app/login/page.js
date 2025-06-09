@@ -1,19 +1,37 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
-import Style from "./login-styles.css"
+import Style from "./login-styles.css";
 import { useUser } from "../UserContext";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [step, setStep] = useState("login");
-  const user= useUser()
-  const router=useRouter();
+  const [step, setStep] = useState("");
+  const user = useUser();
+  const router = useRouter();
 
-  if(user){
-    router.push("/projekty")
-  }
+  useEffect(() => {
+    if (user) {
+      router.push("/projekty");
+    }
+  }, [user, router]);
+
+  useEffect(() => {
+    if (step) {
+      localStorage.setItem("loginStep", step);
+    }
+  }, [step]);
+
+  useEffect(() => {
+    const savedStep = localStorage.getItem("loginStep");
+    if (savedStep) {
+      setStep(savedStep);
+    } else {
+      setStep("login");
+    }
+  }, []);
+
   const renderStep = () => {
     switch (step) {
       case "login":
@@ -21,12 +39,14 @@ export default function LoginPage() {
       case "signup":
         return <SignUpForm onSwitch={setStep} />;
       default:
-        return <LoginForm onSwitch={setStep} />;
+        return;
     }
   };
 
   return (
-        renderStep()
-
+    <>
+      <style>{`header {opacity:0;height:0;padding:0 !important}`}</style>
+      {renderStep()}
+    </>
   );
 }

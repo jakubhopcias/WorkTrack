@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import SideWrapper from "./SideWrapper";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function LoginForm({ onSwitch }) {
   const router = useRouter();
@@ -45,20 +46,13 @@ export default function LoginForm({ onSwitch }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <label htmlFor="password">Twoje hasło</label>
-            <input
-              name="password"
-              type="password"
-              placeholder="Hasło"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <PasswordInput onChange={(e)=>setPassword(e.target.value)} placeholder="Hasło"/>
           </div>
 
           <Button className="primary" type="submit" text="Zaloguj się" />
 
-          {error && <p className="text-red-500">{error}</p>}
-          {success && <p className="text-green-500">{success}</p>}
+          {error && <p className="text-[var(--color-error)]">{error}</p>}
+          {success && <p className="text-[var(--color-success)]">{success}</p>}
 
           <p className="text-center">
             <span className="text-gray-600">Nie masz konta?</span>{" "}

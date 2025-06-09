@@ -27,6 +27,8 @@
   --color-secondary-1-darker: #d70e87;
 
   --color-card:#DFFEC7;
+  --color-success:#69F300;
+  --color-error:#E62361;
   font-size:16px;
 }
 /*
@@ -41,6 +43,16 @@
   }
 }
  */
+ @media screen and (max-width:1024px){
+  :root{
+    font-size:14px;
+  }
+ }
+ @media screen and (max-width:758px){
+  :root{
+    font-size:13px;
+  }
+ }
 body {
   color: var(--color-foreground);
   background: var(--color-background);
@@ -133,4 +145,9 @@ label{
 }
 button{
   max-width:fit-content;
+}
+input[type="password"]:after{
+  width:50px;
+  height:50px;
+  background-image: url("/Eye.svg");
 }

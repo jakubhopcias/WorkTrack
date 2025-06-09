@@ -34,7 +34,7 @@ export default function Header() {
   return (
     <header className="w-full flex flex-row justify-between p-4 items-center">
       <Link href="/">
-        <span className="text-xl font-bold">LOGO</span>
+        <span className="text-xl font-bold">WorkTrack</span>
       </Link>
 
 

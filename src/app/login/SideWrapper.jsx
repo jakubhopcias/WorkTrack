@@ -4,7 +4,7 @@ export default function SideWrapper({ heading, rotate }) {
         backRot=180;
     }
   return (
-    <div className=" flex-1 flex flex-col justify-end px-6 py-24  h-[calc(100% - 4em)] m-4 text-[var(--color-primary-1-darker)] rounded-2xl relative overflow-clip">
+    <div className="side-wrapper flex-1 flex flex-col justify-end px-6 py-24  h-[calc(100dvh - 38em)] m-4 text-[var(--color-white)] rounded-2xl relative overflow-clip">
       
       <h6 className=" relative z-10">WorkTrack</h6>
       <h2 className=" relative z-10">{heading}</h2>
