@@ -29,7 +29,11 @@ export default function SignUpForm({ onSwitch }) {
       password,
     });
     if (error) {
-      setError(error.message);
+      if (error.code === "weak_password") {
+        setError("Hasło jest zbyt słabe. Spróbuj użyć co najmniej 6 znaków.");
+      } else {
+        setError("Błąd podczas rejestracji. Spróbuj ponownie za kilka minut.");
+      }
     } else {
       setSuccess("Rejestracja zakończona. Sprawdź skrzynkę pocztową.");
     }

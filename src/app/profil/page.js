@@ -16,13 +16,13 @@ export default function Profil() {
     if (error) {
       setError(error);
     } else {
-      router.push("/login");
+      router.push("/");
     }
 
   }
   return (
-    <div className="w-full min-h-[40vh] flex justify-center flex-col items-center">
-      <h2> Witaj </h2>
+    <div className="w-full min-h-[40vh] flex justify-center flex-col px-8">
+      <h2> Profil </h2>
       <Button
         text="Wyloguj się"
         className="primary"

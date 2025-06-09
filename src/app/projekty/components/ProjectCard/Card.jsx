@@ -11,13 +11,13 @@ export default function Card({ project, deleteProject }) {
       <div className="bg-[var(--color-card)] mt-2 mr-2 ml-2 rounded-t-2xl p-6 flex flex-col gap-8">
         <h2 className="capitalize">
           <Link
-            legacyBehavior
             href={{
               pathname: `/projekty/${project.slug}`,
               query: { id: project.project_id },
             }}
+            className="hover:underline"
           >
-            <a className="hover:underline">{project.name}</a>
+            {project.name}
           </Link>
         </h2>
 
@@ -29,11 +29,9 @@ export default function Card({ project, deleteProject }) {
             <p>{formatDate(project.creation_date)}</p>
           </div>
           <div className="flex flex-col">
-            <p className=" small text-[var(--color-dark-gray)]">Ostatni etap</p>
+            <p className="small text-[var(--color-dark-gray)]">Ostatni etap</p>
             <p className="min-h-[48px]">
-              {project.last_step ? 
-                 formatDate(project.last_step)
-                : "Brak etapów"}
+              {project.last_step ? formatDate(project.last_step) : "Brak etapów"}
             </p>
           </div>
         </div>
@@ -53,7 +51,6 @@ export default function Card({ project, deleteProject }) {
             aria-label={`Usuń projekt ${project.name}`}
           />
           <Link
-            legacyBehavior
             href={{
               pathname: `/projekty/${project.slug}`,
               query: { id: project.project_id },
@@ -75,11 +72,7 @@ export default function Card({ project, deleteProject }) {
 
       <div className="flex flex-row justify-between p-3 shadow-[-3px_-2px_12.5px_rgba(0,0,0,0.16)] rounded-t-2xl bg-[var(--color-white)] gap-1">
         <Stat iconPath="rate.svg" name="Stawka" value={project.rate} />
-        <Stat
-          iconPath="wallet.svg"
-          name="Wynagrodzenie"
-          value={project.salary}
-        />
+        <Stat iconPath="wallet.svg" name="Wynagrodzenie" value={project.salary} />
         <Stat iconPath="timer.svg" name="Czas" value={project.duration} />
       </div>
     </div>

@@ -28,22 +28,24 @@ export default function AddProjectModal({ setName, closeModal }) {
         <h2>Dodaj projekt</h2>
         {error !== "" && <p>{error}</p>}
         <div className="inputs">
+          <label htmlFor="name">Nazwa</label>
           <input
             type="text"
-            id="name"
+            name="name"
             placeholder="Nazwa"
             onChange={(e) => setTempName(e.target.value)}
           />
+          <label htmlFor="rate">Stawka <span className="small">(domyślnie 50)</span></label>
           <input
             type="number"
-            id="rate"
+            name="rate"
             placeholder="Stawka"
             onChange={(e) => setTempRate(e.target.value)}
           />
         </div>
 
         <Button
-          className="btn primary"
+          className="primary"
           onClick={(e) => {
             e.preventDefault();
             if (tempName === "") {

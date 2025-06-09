@@ -90,7 +90,7 @@ export default function StepForm({ addStep, projectId, rate }) {
           onClick={handleTimerToggle}
         >
           <div
-            className="w-full h-full bg-contain bg-no-repeat bg-center"
+            className="w-20 h-full bg-contain bg-no-repeat bg-center"
             style={{
               backgroundImage: `url('${
                 isTimerRunning ? "/stop.svg" : "/play.svg"
