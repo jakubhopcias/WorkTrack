@@ -46,7 +46,9 @@ body {
   background: var(--color-background);
   font-family: 'Inter', sans-serif;
 }
-
+*{
+  box-sizing: border-box;
+}
 .small{
   font-size: 0.8rem;
   text-transform: uppercase;
@@ -70,13 +72,11 @@ h4 {
 h5 {
   font-size: 1.56rem;
 }
-h6 {
+h6, label {
   font-size: 1.25rem;
 }
 .link{
   text-decoration: underline;
-  font-size:1.08rem;
-  text-transform: uppercase;
 }
 
 .modal-container {
@@ -127,4 +127,10 @@ input[type="number"]{
 }
 .outer-container{
   padding:5vh 5vw;
+}
+label{
+  font-weight: 600;
+}
+button{
+  max-width:fit-content;
 }

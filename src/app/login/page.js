@@ -26,12 +26,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center">
-      <div>
-        <h1>WorkTrack</h1>
-        {renderStep()}
-      
-      </div>
-    </div>
+        renderStep()
+
   );
 }
