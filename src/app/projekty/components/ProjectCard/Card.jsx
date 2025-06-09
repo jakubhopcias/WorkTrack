@@ -39,6 +39,7 @@ export default function Card({ project, deleteProject }) {
           <button
             onClick={() => {
               deleteProject(project.project_id);
+              console.log(project.project_id)
             }}
             style={{
               backgroundImage: "url('trash.svg')",
@@ -46,6 +47,7 @@ export default function Card({ project, deleteProject }) {
               backgroundRepeat: "no-repeat",
               width: 25,
               height: 25,
+              minWidth:25,
               backgroundPosition: "center",
             }}
             aria-label={`Usuń projekt ${project.name}`}

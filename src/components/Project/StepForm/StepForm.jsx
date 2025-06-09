@@ -5,7 +5,6 @@ import formatTime from "../../../js/formatTime";
 
 export default function StepForm({ addStep, projectId, rate }) {
   const [startTime, setStartTime] = useState("");
-  const [name, setName] = useState("");
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timer, setTimer] = useState(0);

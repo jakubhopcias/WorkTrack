@@ -37,18 +37,28 @@ export default function ProjectsPage() {
     );
     if (!confirmDelete) return;
 
-    const { data, error } = await supabase
+    const { error: stepsError } = await supabase
+      .from("steps")
+      .delete()
+      .eq("project_id", projectId);
+
+    if (stepsError) {
+      setError("Błąd usuwania kroków: " + stepsError.message);
+      return;
+    }
+
+    const { data: projectData, error: projectError } = await supabase
       .from("projects")
       .delete()
       .eq("project_id", projectId)
       .eq("user_id", user.id);
 
-    if (error) {
-      setError(error.message);
+    if (projectError) {
+      setError("Błąd usuwania projektu: " + projectError.message);
       return;
     }
 
-    if (data) {
+    if (projectData) {
       setProjects((prevProjects) =>
         prevProjects.filter((p) => p.project_id !== projectId)
       );
