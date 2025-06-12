@@ -22,6 +22,7 @@ export default function StepForm({ addStep, projectId, rate }) {
     return () => clearInterval(intervalRef.current);
   }, [isTimerRunning]);
 
+
   function handleTimerToggle(e) {
     e.preventDefault();
     if (!isTimerRunning) {
@@ -39,11 +40,11 @@ export default function StepForm({ addStep, projectId, rate }) {
       const endTime = new Date();
       const duration = (timer / 3600).toFixed(2) * 1; // czas w godzinach
       const step = {
-        project_id:projectId,
+        project_id: projectId,
         name: name,
         start_time: startTime,
         end_time: endTime,
-        salary:duration*rate,
+        salary: duration * rate,
         duration: duration,
       };
       addStep(step);
@@ -54,10 +55,10 @@ export default function StepForm({ addStep, projectId, rate }) {
 
     function clearConsts() {
       setStartTime("");
-      setName("");
       setIsModalOpen(false);
       setTimer(0);
       clearInterval(intervalRef.current);
+      localStorage.setItem("measuredTime", 0);
     }
   }
 

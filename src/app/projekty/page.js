@@ -78,7 +78,9 @@ export default function ProjectsPage() {
       });
     }
   }
-
+if (!user) {
+      router.push("/login");
+    }
   useEffect(() => {
     if (!user) return;
     async function fetchProjects() {
@@ -96,9 +98,7 @@ export default function ProjectsPage() {
         setProjects(data);
       }
     }
-    if (!user) {
-      router.push("/login");
-    }
+    
 
     fetchProjects();
   }, [user, projects]);

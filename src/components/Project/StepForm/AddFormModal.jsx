@@ -6,7 +6,7 @@ export default function AddFormModal({ setName, closeModal }) {
   return (
     <div className="modal-container">
       <div className="modal">
-        <svg onClick={()=>setName()}
+        <svg onClick={(e)=>setName()}
           width="20"
           height="20"
           viewBox="0 0 20 20"

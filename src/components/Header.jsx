@@ -32,13 +32,13 @@ export default function Header() {
   )
 
   return (
-    <header className="w-full flex flex-row justify-between p-4 items-center">
+    <header className="z-10 w-[600px] min-w-[600px] flex flex-row justify-between px-8 py-3 rounded-2xl mt-3 fixed top-0 left-1/2 -translate-x-1/2 bg-neutral-100 shadow-2xl p-4 items-center">
       <Link href="/">
         <span className="text-xl font-bold">WorkTrack</span>
       </Link>
 
 
-        {user && <Link href="/projekty">Projekty</Link>}
+        <Link href="/projekty">Projekty</Link>
 
         {user ? (
           <Link href="/profil">{userSvg}</Link>
