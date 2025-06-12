@@ -5,6 +5,7 @@ import SignUpForm from "./SignUpForm";
 import Style from "./login-styles.css";
 import { useUser } from "../UserContext";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function LoginPage() {
   const [step, setStep] = useState("");
@@ -30,14 +31,43 @@ export default function LoginPage() {
     } else {
       setStep("login");
     }
+    
   }, []);
+  const transition = {
+    duration: 0.1,
+  };
 
+  const animationAttributes = {
+    initial: { opacity: 0, x: 20 },
+    animate: { opacity: 1, x: 0 },
+    transition: { transition },
+  };
   const renderStep = () => {
     switch (step) {
       case "login":
-        return <LoginForm onSwitch={setStep} />;
+        return (
+          <motion.div
+            key="login"
+            initial={animationAttributes.initial}
+            animate={animationAttributes.animate}
+            exit={animationAttributes.initial}
+            transition={animationAttributes.transition}
+          >
+            <LoginForm onSwitch={setStep} />
+          </motion.div>
+        );
       case "signup":
-        return <SignUpForm onSwitch={setStep} />;
+        return (
+          <motion.div
+            key="signup"
+            initial={animationAttributes.initial}
+            animate={animationAttributes.animate}
+            exit={animationAttributes.initial}
+            transition={animationAttributes.transition}
+          >
+            <SignUpForm onSwitch={setStep} />
+          </motion.div>
+        );
       default:
         return;
     }
@@ -45,8 +75,8 @@ export default function LoginPage() {
 
   return (
     <>
-      <style>{`header {opacity:0;height:0;padding:0 !important}`}</style>
-      {renderStep()}
+      <style>{`header {opacity:0;height:0;padding:0 !important} body{overflow:clip}`}</style>
+      <AnimatePresence mode="wait">{renderStep()}</AnimatePresence>
     </>
   );
 }
