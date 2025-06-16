@@ -128,7 +128,7 @@ if (!user) {
           <p>Brak projektów</p>
         )}
         {error && <p>{error.message}</p>}
-      </div>asdfasdfdas
+      </div>
       {isModalOpen && (
         <AddProjectModal
           setName={(name, rate) => handleModalClose(name, rate)}
