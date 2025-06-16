@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import AddFormModal from "./AddFormModal";
 import Button from "../../Button";
 import formatTime from "../../../js/formatTime";
+import addHoursToDate from "@/js/addHoursToDate";
 
 export default function StepForm({ addStep, projectId, rate }) {
-  const [startTime, setStartTime] = useState("");
+  const [startTime, setStartTime] = useState(new Date());
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -23,6 +24,7 @@ export default function StepForm({ addStep, projectId, rate }) {
   }, [isTimerRunning]);
 
 
+
   function handleTimerToggle(e) {
     e.preventDefault();
     if (!isTimerRunning) {
@@ -37,8 +39,8 @@ export default function StepForm({ addStep, projectId, rate }) {
   function handleModalClose(name) {
     if (name) {
       setIsTimerRunning(false);
-      const endTime = new Date();
       const duration = (timer / 3600).toFixed(2) * 1; // czas w godzinach
+      const endTime = addHoursToDate(startTime, duration);
       const step = {
         project_id: projectId,
         name: name,
@@ -58,7 +60,6 @@ export default function StepForm({ addStep, projectId, rate }) {
       setIsModalOpen(false);
       setTimer(0);
       clearInterval(intervalRef.current);
-      localStorage.setItem("measuredTime", 0);
     }
   }
 

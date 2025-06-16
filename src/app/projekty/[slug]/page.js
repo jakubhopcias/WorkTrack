@@ -116,8 +116,16 @@ export default function Project() {
       <ProjectStats project={project} />
       {error && <p className="text-red-600">{error}</p>}
       <RateForm addRate={addRate} currentRate={project.rate} />
-      <Step addStep={addStep} project={project.project_id} rate={project.rate} />
-      <CustomTimeForm addStep={addStep} project={project.project_id} rate={project.rate} />
+      <Step
+        addStep={addStep}
+        project={project.project_id}
+        rate={project.rate}
+      />
+      <CustomTimeForm
+        addStep={addStep}
+        project={project.project_id}
+        rate={project.rate}
+      />
       <StepList
         deleteStep={(step) => deleteStep(step)}
         steps={steps}
