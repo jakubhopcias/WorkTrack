@@ -1,11 +1,12 @@
-"use client"
-import Link from "next/link"
-import Button from "./Button"
-import { useUser } from "@/app/UserContext"
+"use client";
+import Link from "next/link";
+import Button from "../Button";
+import { useUser } from "@/app/UserContext";
+import "./header.css";
+import { useState } from "react";
 
 export default function Header() {
-  const user = useUser()
-
+  const  user  = useUser();
   const userSvg = (
     <svg
       width="43"
@@ -29,14 +30,14 @@ export default function Header() {
         strokeLinecap="round"
       />
     </svg>
-  )
+  );
 
   return (
-    <header className="z-10 w-[600px] min-w-[600px] flex flex-row justify-between px-8 py-3 rounded-2xl mt-3 fixed top-0 left-1/2 -translate-x-1/2 bg-neutral-100 shadow-2xl p-4 items-center">
+    <div className="sticky w-full pt-3">
+    <header className="z-10 flex w-fit max-w-full min-w-[320px] justify-between flex-row py-2  rounded-2xl m-auto px-6 bg-neutral-100 shadow-2xl items-center">
       <Link href="/">
         <span className="text-xl font-bold">WorkTrack</span>
       </Link>
-
 
         <Link href="/projekty">Projekty</Link>
 
@@ -47,7 +48,11 @@ export default function Header() {
             <Button text="Zaloguj się" className="primary" />
           </Link>
         )}
-  
+        
+
+   
     </header>
-  )
+    </div>
+    
+  );
 }

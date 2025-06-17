@@ -113,7 +113,7 @@ if (!user) {
           onClick={() => setIsModalOpen(true)}
         />
       </div>
-      <div className="projects grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-2">
+      <div className="projects grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4">
         {isLoading ? (
           Array.from({ length: 3 }).map((_, i) => <PlaceholderCard key={i} />)
         ) : projects.length > 0 ? (

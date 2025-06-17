@@ -6,9 +6,9 @@ export default function Card({ project, deleteProject }) {
   return (
     <div
       key={project.slug}
-      className="card bg-[var(--color-white)] shadow-2xl rounded-2xl overflow-clip max-w-[800px]"
+      className="card bg-[var(--color-white)] shadow-2xl rounded-2xl overflow-clip max-w-[500px]"
     >
-      <div className="bg-[var(--color-card)] mt-2 mr-2 ml-2 rounded-t-2xl p-6 flex flex-col gap-8">
+      <div className="max-w-full bg-[var(--color-card)] mt-2 mr-2 ml-2 rounded-t-2xl p-6 flex flex-col gap-8">
         <h2 className="capitalize">
           <Link
             href={{
@@ -21,7 +21,7 @@ export default function Card({ project, deleteProject }) {
           </Link>
         </h2>
 
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between max-w-full">
           <div className="flex flex-col">
             <p className="small text-[var(--color-dark-gray)]">
               Data utworzenia

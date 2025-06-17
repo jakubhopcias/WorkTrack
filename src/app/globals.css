@@ -50,19 +50,21 @@
  }
  @media screen and (max-width:758px){
   :root{
-    font-size:13px;
+    font-size:10px;
   }
  }
 body {
   color: var(--color-foreground);
   background: var(--color-background);
   font-family: 'Inter', sans-serif;
+  font-size:16px;
+  position:relative;
 }
 *{
   box-sizing: border-box;
 }
 .small{
-  font-size: 0.8rem;
+  font-size: 13px;
   text-transform: uppercase;
 }
 h1,h2,h3,h4,h5,h6{
@@ -85,7 +87,7 @@ h5 {
   font-size: 1.56rem;
 }
 h6, label {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
 }
 .link{
   text-decoration: underline;
