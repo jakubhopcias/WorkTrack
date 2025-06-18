@@ -9,21 +9,24 @@ export default function StepForm({ addStep, projectId, rate }) {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timer, setTimer] = useState(0);
+
   const intervalRef = useRef(null);
 
   useEffect(() => {
     if (isTimerRunning) {
       intervalRef.current = setInterval(() => {
-        setTimer((prev) => prev + 1);
+        const now = new Date();
+        const secondsElapsed = Math.floor(
+          (now.getTime() - startTime.getTime()) / 1000
+        );
+        setTimer(secondsElapsed);
       }, 1000);
     } else {
       clearInterval(intervalRef.current);
     }
 
     return () => clearInterval(intervalRef.current);
-  }, [isTimerRunning]);
-
-
+  }, [isTimerRunning, startTime]);
 
   function handleTimerToggle(e) {
     e.preventDefault();
