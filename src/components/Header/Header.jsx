@@ -34,7 +34,7 @@ export default function Header() {
 
   return (
     <div className="sticky w-full pt-3">
-    <header className="z-10 flex w-fit min-w-[350px] max-w-full justify-between flex-row py-2  rounded-2xl m-auto px-6 bg-neutral-100 shadow-2xl items-center">
+    <header className="text-[var(--color-white)] z-10 flex w-fit min-w-[350px] max-w-full justify-between flex-row py-2  rounded-2xl m-auto px-6 bg-[var(--color-black)] shadow-2xl items-center">
       <Link href="/">
         <span className="text-xl font-bold">WorkTrack</span>
       </Link>
