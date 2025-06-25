@@ -8,11 +8,12 @@ export default function Card({ project, deleteProject }) {
   return (
     <div
       key={project.slug}
-      className="card bg-[var(--color-white)] shadow-2xl rounded-2xl overflow-clip flex flex-col justify-between"
+      className="group bg-[var(--color-white)] shadow-2xl rounded-2xl overflow-clip flex flex-col justify-between"
     >
-      <div className=" max-w-full h-full bg-[var(--color-card)] mt-2 mr-2 ml-2 rounded-t-2xl p-6 flex flex-col justify-between gap-4">
+      <div className="group-hover:bg-[var(--color-card-hover)] max-w-full h-full bg-[var(--color-card)] mt-2 mr-2 ml-2 rounded-t-2xl p-6 flex flex-col justify-between gap-4">
         <h2 className="capitalize">
           <Link
+    
             href={{
               pathname: `/projekty/${project.slug}`,
               query: { id: project.project_id },

@@ -4,7 +4,7 @@ import displayHours from "@/js/displayHours";
 export default function StepList({ steps = [], deleteStep, hourlyRate }) {
   const scrollRef = useRef(null);
 
-  const cardBackground="bg-[var(--color-primary-3-lighter)]";
+  const cardBackground="bg-[var(--color-gray)]";
   useEffect(() => {
     const el = scrollRef.current;
     if (el) {
