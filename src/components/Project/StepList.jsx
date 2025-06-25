@@ -1,4 +1,6 @@
 import { useEffect,useRef } from "react";
+import displayHours from "@/js/displayHours";
+
 export default function StepList({ steps = [], deleteStep, hourlyRate }) {
   const scrollRef= useRef(null);
 
@@ -34,7 +36,7 @@ export default function StepList({ steps = [], deleteStep, hourlyRate }) {
                         Czas
                       </p>
                       <div className="flex gap-2 items-end">
-                        <h5>{step.duration}</h5>
+                        <h5>{displayHours(step.duration)}</h5>
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">

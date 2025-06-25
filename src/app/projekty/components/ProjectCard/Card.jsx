@@ -1,14 +1,16 @@
 import Link from "next/link";
 import Stat from "./Stat";
 import formatDate from "@/js/formatDate";
+import displayHours from "@/js/displayHours";
 
 export default function Card({ project, deleteProject }) {
+  
   return (
     <div
       key={project.slug}
-      className="card bg-[var(--color-white)] shadow-2xl rounded-2xl overflow-clip max-w-[500px]"
+      className="card bg-[var(--color-white)] shadow-2xl rounded-2xl overflow-clip flex flex-col justify-between"
     >
-      <div className="max-w-full bg-[var(--color-card)] mt-2 mr-2 ml-2 rounded-t-2xl p-6 flex flex-col gap-8">
+      <div className=" max-w-full h-full bg-[var(--color-card)] mt-2 mr-2 ml-2 rounded-t-2xl p-6 flex flex-col justify-between gap-4">
         <h2 className="capitalize">
           <Link
             href={{
@@ -75,7 +77,7 @@ export default function Card({ project, deleteProject }) {
       <div className="flex flex-row justify-between p-3 shadow-[-3px_-2px_12.5px_rgba(0,0,0,0.16)] rounded-t-2xl bg-[var(--color-white)] gap-1">
         <Stat iconPath="rate.svg" name="Stawka" value={project.rate} />
         <Stat iconPath="wallet.svg" name="Wynagrodzenie" value={project.salary} />
-        <Stat iconPath="timer.svg" name="Czas" value={project.duration} />
+        <Stat iconPath="timer.svg" name="Czas" value={displayHours(project.duration)} />
       </div>
     </div>
   );
