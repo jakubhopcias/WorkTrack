@@ -1,6 +1,6 @@
 import Link from "next/link";
 import formatDate from "@/js/formatDate";
-
+import displayHours from "@/js/displayHours";
 export default function ProjectStats({ project }) {
   return (
     <div className="flex flex-col gap-2">
@@ -46,7 +46,7 @@ export default function ProjectStats({ project }) {
         <div className="stat min-w-40">
           <p className="small text-[var(--color-dark-gray)]">Czas trwania</p>
           <h4 className="text-[var(--color-secondary)]">
-            {project.duration} H
+            {displayHours(project.duration)}
           </h4>
         </div>
       </div>
