@@ -75,7 +75,7 @@ export default function Card({ project, deleteProject }) {
         </div>
       </div>
 
-      <div className="flex flex-row justify-between p-3 shadow-[-3px_-2px_12.5px_rgba(0,0,0,0.16)] rounded-t-2xl bg-[var(--color-white)] gap-1">
+      <div className="flex flex-row justify-between p-3 border-b-2 border-l-2 border-r-2 shadow-[-3px_-2px_12.5px_rgba(0,0,0,0.16)] rounded-t-2xl bg-[var(--color-white)] gap-1">
         <Stat iconPath="rate.svg" name="Stawka" value={project.rate} />
         <Stat iconPath="wallet.svg" name="Wynagrodzenie" value={project.salary} />
         <Stat iconPath="timer.svg" name="Czas" value={displayHours(project.duration)} />
