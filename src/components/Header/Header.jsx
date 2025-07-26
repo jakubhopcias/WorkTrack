@@ -2,8 +2,6 @@
 import Link from "next/link";
 import Button from "../Button";
 import { useUser } from "@/app/UserContext";
-import "./header.css";
-import { useState } from "react";
 
 export default function Header() {
   const  user  = useUser();
@@ -14,6 +12,7 @@ export default function Header() {
       viewBox="0 0 43 43"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className=" fill-[var(--color-white)] stroke-[var(--color-white)]"
     >
       <path
         d="M35.345 36.6344C34.5284 34.3486 32.7289 32.3287 30.2257 30.8881C27.7224 29.4475 24.6553 28.6667 21.5001 28.6667C18.3448 28.6667 15.2777 29.4475 12.7745 30.8881C10.2713 32.3287 8.47179 34.3486 7.65515 36.6344"
