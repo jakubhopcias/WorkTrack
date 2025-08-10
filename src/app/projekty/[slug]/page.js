@@ -4,7 +4,7 @@ import ProjectStats from "@/components/Project/ProjectStats";
 import RateForm from "@/components/Project/RateForm";
 import Step from "@/components/Project/StepForm/StepForm";
 import StepList from "@/components/Project/StepList";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import CustomTimeForm from "@/components/Project/CustomTimeForm/CustomTimeForm";
 import { supabase } from "@/lib/supabase";
@@ -15,6 +15,7 @@ export default function Project() {
   const [error, setError] = useState("");
   const { slug } = useParams();
   const projectId = useSearchParams().get("id");
+  const [isMonthly, setIsMonthly] = useState(true);
 
   // Pobierz projekt z bazy
   async function fetchProject() {
@@ -28,16 +29,33 @@ export default function Project() {
       setError(error.message);
       return;
     }
+    console.log(data)
     setProject(data);
   }
 
   // Pobierz kroki projektu z bazy
   async function fetchSteps() {
-    const { data, error } = await supabase
-      .from("steps")
-      .select("*")
-      .eq("project_id", projectId)
-      .order("id", { ascending: true });
+    let { data, error } = {};
+    if (isMonthly) {
+      const startOfMoth = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        1
+      ).toISOString();
+
+      ({ data, error } = await supabase
+        .from("steps")
+        .select("*")
+        .eq("project_id", projectId)
+        .gte("start_time", startOfMoth)
+        .order("id", { ascending: true }));
+    } else {
+      ( { data, error } = await supabase
+        .from("steps")
+        .select("*")
+        .eq("project_id", projectId)
+        .order("id", { ascending: true }));
+    }
 
     if (error) {
       setError(error.message);
@@ -45,7 +63,9 @@ export default function Project() {
     }
     setSteps(data);
   }
-
+  useEffect(()=>{
+    fetchSteps();
+  },[isMonthly])
   const addStep = async (step) => {
     const { data, error } = await supabase
       .from("steps")
@@ -113,7 +133,7 @@ export default function Project() {
 
   return (
     <div className="outer-container mx-7 flex flex-col items-left justify-between h-screen gap-4">
-      <ProjectStats project={project} />
+      <ProjectStats project={project} onClickSwitch={()=> setIsMonthly(!isMonthly)} steps={steps} showMonthly={isMonthly} />
       {error && <p className="text-red-600">{error}</p>}
       <Step
         addStep={addStep}
