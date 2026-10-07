@@ -1,8 +1,7 @@
-
-
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
-import { UserProvider, useUser } from "./UserContext";
+import { UserProvider } from "./UserContext";
 import Header from "@/components/Header/Header";
 
 const geistSans = Geist({
@@ -10,10 +9,7 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const themeBoot = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)}catch(e){}`;
 
 export const metadata = {
   title: "WorkTrack",
@@ -22,13 +18,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="pl" className={geistSans.variable} suppressHydrationWarning>
+      <body className="antialiased">
+        <Script id="theme-boot" strategy="beforeInteractive">
+          {themeBoot}
+        </Script>
         <UserProvider>
-          <Header></Header>
-          {children}
+          <Header />
+          <main>{children}</main>
         </UserProvider>
       </body>
     </html>

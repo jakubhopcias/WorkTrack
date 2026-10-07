@@ -4,7 +4,7 @@ import ProjectStats from "@/components/Project/ProjectStats";
 import RateForm from "@/components/Project/RateForm";
 import Step from "@/components/Project/StepForm/StepForm";
 import StepList from "@/components/Project/StepList";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import CustomTimeForm from "@/components/Project/CustomTimeForm/CustomTimeForm";
 import { supabase } from "@/lib/supabase";
@@ -29,7 +29,6 @@ export default function Project() {
       setError(error.message);
       return;
     }
-    console.log(data)
     setProject(data);
   }
 
@@ -48,13 +47,13 @@ export default function Project() {
         .select("*")
         .eq("project_id", projectId)
         .gte("start_time", startOfMoth)
-        .order("id", { ascending: true }));
+        .order("start_time", { ascending: false }));
     } else {
-      ( { data, error } = await supabase
+      ({ data, error } = await supabase
         .from("steps")
         .select("*")
         .eq("project_id", projectId)
-        .order("id", { ascending: true }));
+        .order("start_time", { ascending: false }));
     }
 
     if (error) {
@@ -129,28 +128,37 @@ export default function Project() {
     fetchSteps();
   }, [projectId]);
 
-  if (!project) return <p>Ładowanie projektu...</p>;
+  if (!project) {
+    return (
+      <div className="page">
+        <p className="text-sm text-[var(--muted)]">Ładowanie projektu…</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="outer-container mx-7 flex flex-col items-left justify-between h-screen gap-4">
-      <ProjectStats project={project} onClickSwitch={()=> setIsMonthly(!isMonthly)} steps={steps} showMonthly={isMonthly} />
-      {error && <p className="text-red-600">{error}</p>}
-      <Step
-        addStep={addStep}
-        project={project.project_id}
-        rate={project.rate}
-      />
-      <CustomTimeForm
-        addStep={addStep}
-        project={project.project_id}
-        rate={project.rate}
-      />
-      <StepList
-        deleteStep={(step) => deleteStep(step)}
-        steps={steps}
-        hourlyRate={project.rate}
-      />
-      <RateForm addRate={addRate} currentRate={project.rate} />
+    <div className="page flex flex-col gap-6">
+      <section className="panel grid min-w-0 overflow-hidden lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)]">
+        <div className="flex min-w-0 flex-col gap-5 border-b border-[var(--line)] p-5 sm:p-6 lg:border-b-0 lg:border-r">
+          <ProjectStats
+            project={project}
+            onClickSwitch={() => setIsMonthly(!isMonthly)}
+            steps={steps}
+            showMonthly={isMonthly}
+          />
+          {error && <p className="form-error">{error}</p>}
+          <div className="mt-auto border-t border-[var(--line)] pt-5">
+            <RateForm addRate={addRate} currentRate={project.rate} />
+          </div>
+        </div>
+
+        <div className="flex min-w-0 flex-col items-center justify-center gap-5 px-5 py-8 sm:px-6">
+          <Step addStep={addStep} projectId={project.project_id} rate={project.rate} />
+          <CustomTimeForm addStep={addStep} projectId={project.project_id} rate={project.rate} />
+        </div>
+      </section>
+
+      <StepList deleteStep={(step) => deleteStep(step)} steps={steps} hourlyRate={project.rate} />
     </div>
   );
 }

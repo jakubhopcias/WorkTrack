@@ -33,37 +33,54 @@ export default function LoginForm({ onSwitch }) {
   };
 
   return (
-    <div className="login-wrapper">
-      <div className="login-form">
-        <form onSubmit={handleSignIn}>
-          <h2 className="text-center">Witaj z powrotem</h2>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email">Twój email</label>
-            <input
-              name="email"
-              type="email"
-              placeholder="Twój email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <PasswordInput onChange={(e)=>setPassword(e.target.value)} placeholder="Hasło"/>
+    <div className="grid min-h-dvh md:grid-cols-2">
+      <div className="flex items-center justify-center px-6 py-16">
+        <form onSubmit={handleSignIn} className="flex w-full max-w-[400px] flex-col gap-6">
+          <div>
+            <p className="small">Konto</p>
+            <h1 className="mt-2">Witaj z powrotem</h1>
+            <p className="mt-2 text-sm text-[var(--muted)]">Zaloguj się, żeby wrócić do projektów.</p>
           </div>
 
-          <Button className="primary" type="submit" text="Zaloguj się" />
+          <div className="flex flex-col gap-4">
+            <label className="field" htmlFor="email">
+              Email
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="jan@firma.pl"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </label>
+            <PasswordInput
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Hasło"
+              autoComplete="current-password"
+            />
+          </div>
 
-          {error && <p className="text-[var(--color-error)]">{error}</p>}
-          {success && <p className="text-[var(--color-success)]">{success}</p>}
+          {error && <p className="form-error">{error}</p>}
+          {success && <p className="form-success">{success}</p>}
 
-          <p className="text-center">
-            <span className="text-gray-600">Nie masz konta?</span>{" "}
-            <button className="link"type="button" onClick={() => onSwitch("signup")}>
+          <Button className="primary w-full" type="submit" text="Zaloguj się" />
+
+          <p className="text-sm text-[var(--muted)]">
+            Nie masz konta?{" "}
+            <button className="link" type="button" onClick={() => onSwitch("signup")}>
               Zarejestruj się
             </button>
           </p>
         </form>
       </div>
 
-      <SideWrapper heading="Przyspiesz i zorganizuj swoją pracę."/>
+      <SideWrapper
+        heading="Wracasz do swoich projektów."
+        text="Czas, etapy i stawka czekają tam, gdzie je zostawiłeś."
+      />
     </div>
   );
 }

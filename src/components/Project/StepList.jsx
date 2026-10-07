@@ -1,84 +1,74 @@
-import { useEffect, useRef } from "react";
+"use client";
+
 import displayHours from "@/js/displayHours";
+import formatMoney from "@/js/formatMoney";
+import { IconTrash } from "../Icons";
+
+function formatStepDate(value) {
+  return new Date(value).toLocaleString("pl-PL", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 export default function StepList({ steps = [], deleteStep, hourlyRate }) {
-  const scrollRef = useRef(null);
-
-  const cardBackground = "bg-[var(--color-primary-3-lighter)]";
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (el) {
-      el.scrollLeft = el.scrollWidth;
-    }
-  });
   return (
-    <div ref={scrollRef} className="overflow-auto w-full min-h-fit relative ">
-      <div className="step-list pb-5 flex gap-4 h-full w-fit  flex-row justify-end">
-        {steps.length > 0 ? (
-          steps.map((step, index) => {
-            return (
-              <div
-                key={index}
-                className="relative rounded-2xl text-[var(--color-black)]  step-item min-w-[300px]  flex flex-col"
-              >
-                <div className="flex flex-row justify-between gap-2">
-                  <div className="w-full mb-2 top-0 left-0   px-6 text-[13px] text-[var(--color-black)] bg-[var(--color-primary-1-lighter)] py-2 rounded-xl">
-                    {step.name}
-                  </div>
-                  <div
-                    className={`text-right relative before:z-10 before:content-[''] before:absolute before:w-1/2 before:h-3/4 before:bottom-0 before:-left-[calc(50%-3px)] before:rounded-br-2xl before:shadow-[3px_3px_0_var(--color-primary-3-lighter)] before:g ml-auto max-w-[50%]  rounded-tr-2xl rounded-tl-2xl py-3 px-4 w-fit ${cardBackground} small text-[var(--color-dark-gray)]`}
-                  >
-                    {new Date(step.start_time).toLocaleDateString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </div>
-                </div>
-                <div
-                  className={`h-full justify-center flex flex-col rounded-tl-2xl ${cardBackground} px-2 py-4 rounded-b-2xl`}
-                >
-                  <div className=" flex gap-4 justify-between items-end px-5">
-                    <div className="flex flex-col gap-2">
-                      <p className="small text-[var(--color-dark-gray)]">
-                        Czas
-                      </p>
-                      <div className="flex gap-2 items-end">
-                        <h6>{displayHours(step.duration)}</h6>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <p className="small text-[var(--color-dark-gray)]">
-                        Wynagrodzenie
-                      </p>
-                      <div className="flex gap-2 items-end">
-                        <h6>
-                          {Math.round(step.duration * hourlyRate * 100) / 100}
-                        </h6>
-                        <p className="small"> pln</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="block text-right">
-                    <button
-                      className="btn"
-                      onClick={() => {
-                        deleteStep(index);
-                      }}
-                    >
-                      <div
-                        className="w-5 h-6 bg-no-repeat bg-center bg-contain"
-                        style={{ backgroundImage: "url('/trash.svg')" }}
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <p>Brak kroków</p>
-        )}
+    <section className="panel overflow-hidden">
+      <div className="flex items-baseline justify-between gap-3 px-5 pt-5 sm:px-6 sm:pt-6">
+        <h2>Etapy</h2>
+        <p className="text-sm tabular-nums text-[var(--muted)]">{steps.length}</p>
       </div>
-    </div>
+
+      {steps.length > 0 ? (
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[520px] border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-y border-[var(--line)] bg-[var(--surface-2)] text-[var(--muted)]">
+                <th className="px-5 py-3 font-medium sm:px-6">Nazwa</th>
+                <th className="px-3 py-3 font-medium">Data</th>
+                <th className="px-3 py-3 font-medium">Czas</th>
+                <th className="px-3 py-3 font-medium">Kwota</th>
+                <th className="w-12 px-3 py-3" aria-label="Akcje" />
+              </tr>
+            </thead>
+            <tbody>
+              {steps.map((step, index) => (
+                <tr key={step.id ?? index} className="border-b border-[var(--line)] last:border-b-0">
+                  <td className="max-w-[220px] px-5 py-3.5 font-medium sm:px-6">
+                    <span className="line-clamp-2 break-words">{step.name}</span>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3.5 tabular-nums text-[var(--muted)]">
+                    {formatStepDate(step.start_time)}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3.5 tabular-nums">
+                    {displayHours(step.duration)}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3.5 tabular-nums">
+                    {formatMoney(Math.round(step.duration * hourlyRate * 100) / 100)} zł
+                  </td>
+                  <td className="px-2 py-2.5 text-right">
+                    <button
+                      type="button"
+                      className="icon-btn is-danger"
+                      onClick={() => deleteStep(index)}
+                      aria-label={`Usuń etap ${step.name}`}
+                    >
+                      <IconTrash />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p className="px-5 py-10 text-sm text-[var(--muted)] sm:px-6">
+          W tym widoku nie ma jeszcze żadnego etapu.
+        </p>
+      )}
+    </section>
   );
 }

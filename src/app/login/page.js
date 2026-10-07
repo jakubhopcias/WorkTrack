@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
-import Style from "./login-styles.css";
 import { useUser } from "../UserContext";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -16,7 +15,7 @@ export default function LoginPage() {
     if (user) {
       router.push("/projekty");
     }
-  }, [user, router]);
+  }, [user]);
 
   useEffect(() => {
     if (step) {
@@ -31,52 +30,33 @@ export default function LoginPage() {
     } else {
       setStep("login");
     }
-    
   }, []);
-  const transition = {
-    duration: 0.1,
+
+  const animation = {
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -8 },
+    transition: { duration: 0.18 },
   };
 
-  const animationAttributes = {
-    initial: { opacity: 0, x: 20 },
-    animate: { opacity: 1, x: 0 },
-    transition: { transition },
-  };
   const renderStep = () => {
     switch (step) {
       case "login":
         return (
-          <motion.div
-            key="login"
-            initial={animationAttributes.initial}
-            animate={animationAttributes.animate}
-            exit={animationAttributes.initial}
-            transition={animationAttributes.transition}
-          >
+          <motion.div key="login" {...animation}>
             <LoginForm onSwitch={setStep} />
           </motion.div>
         );
       case "signup":
         return (
-          <motion.div
-            key="signup"
-            initial={animationAttributes.initial}
-            animate={animationAttributes.animate}
-            exit={animationAttributes.initial}
-            transition={animationAttributes.transition}
-          >
+          <motion.div key="signup" {...animation}>
             <SignUpForm onSwitch={setStep} />
           </motion.div>
         );
       default:
-        return;
+        return null;
     }
   };
 
-  return (
-    <>
-      <style>{`header {opacity:0;height:0;padding:0 !important} body{overflow:clip}`}</style>
-      <AnimatePresence mode="wait">{renderStep()}</AnimatePresence>
-    </>
-  );
+  return <AnimatePresence mode="wait">{renderStep()}</AnimatePresence>;
 }

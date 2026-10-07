@@ -1,51 +1,38 @@
-import { useState } from "react";
+"use client";
 
-export default function AddFormModal({ setName, closeModal }) {
+import { useState } from "react";
+import Button from "@/components/Button";
+import Modal from "@/components/Modal";
+
+export default function AddFormModal({ setName }) {
   const [tempName, setTempName] = useState("");
   const [error, setError] = useState("");
+
+  function submit(event) {
+    event.preventDefault();
+    if (tempName.trim() === "") {
+      setError("Nazwa nie może być pusta.");
+      return;
+    }
+    setName(tempName.trim());
+  }
+
   return (
-    <div className="modal-container">
-      <div className="modal">
-        <svg onClick={(e)=>setName()}
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="close"
-        >
-          <path
-            d="M18 2L10 10M2 18L10 10M10 10L18 18L2 2"
-            stroke="#F300D2"
-            strokeWidth="3"
-            strokeLinejoin="bevel"
+    <Modal title="Nazwa etapu" onClose={() => setName()}>
+      <form className="form-stack" onSubmit={submit}>
+        <label className="field" htmlFor="step-name">
+          Nad czym pracowałeś?
+          <input
+            id="step-name"
+            type="text"
+            placeholder="Np. projektowanie"
+            value={tempName}
+            onChange={(e) => setTempName(e.target.value)}
           />
-        </svg>
-        <h2>Dodaj krok</h2>
-        {error !== "" && <p>{error}</p>}
-        <input
-          type="text"
-          id="name"
-          placeholder="Nazwa"
-          className="step-input"
-          onChange={(e) => setTempName(e.target.value)}
-        />
-        <button
-          className="btn"
-          onClick={(e) => {
-            e.preventDefault();
-            if (tempName === "") {
-              setError("Nazwa nie może być pusta");
-              return;
-            } else {
-              setName(tempName);
-              closeModal();
-            }
-          }}
-        >
-          Zatwierdź
-        </button>
-      </div>
-    </div>
+        </label>
+        {error && <p className="form-error">{error}</p>}
+        <Button className="primary w-full" type="submit" text="Zapisz etap" />
+      </form>
+    </Modal>
   );
 }

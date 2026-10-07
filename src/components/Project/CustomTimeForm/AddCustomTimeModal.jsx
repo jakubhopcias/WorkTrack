@@ -1,68 +1,60 @@
+"use client";
+
 import { useState } from "react";
+import Button from "@/components/Button";
+import Modal from "@/components/Modal";
 
 export default function AddCustomTimeModal({ setStep }) {
   const [tempName, setTempName] = useState("");
   const [tempDate, setTempDate] = useState("");
-  const [tempDuration, setTempDuration] = useState(0);
+  const [tempDuration, setTempDuration] = useState("");
   const [error, setError] = useState("");
 
+  function submit(event) {
+    event.preventDefault();
+    if (!tempName.trim() || !tempDate || Number(tempDuration) <= 0) {
+      setError("Uzupełnij nazwę, datę i czas trwania.");
+      return;
+    }
+    setStep(tempName.trim(), tempDate, Number(tempDuration));
+  }
+
   return (
-    <div className="modal-container">
-      <div className="modal">
-        <svg
-          onClick={() => setStep()}
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="close"
-        >
-          <path
-            d="M18 2L10 10M2 18L10 10M10 10L18 18L2 2"
-            stroke="#F300D2"
-            strokeWidth="3"
-            strokeLinejoin="bevel"
+    <Modal title="Etap ręcznie" onClose={() => setStep()}>
+      <form className="form-stack" onSubmit={submit}>
+        <label className="field" htmlFor="custom-name">
+          Nazwa
+          <input
+            id="custom-name"
+            type="text"
+            placeholder="Np. poprawki"
+            value={tempName}
+            onChange={(e) => setTempName(e.target.value)}
           />
-        </svg>
-        <h2>Dodaj krok</h2>
-        {error !== "" && <p>{error}</p>}
-        <input
-          type="text"
-          id="name"
-          placeholder="Nazwa"
-          className="step-input"
-          onChange={(e) => setTempName(e.target.value)}
-        />
-        <input
-          type="datetime-local"
-          id="startDate"
-          placeholder="Data rozpoczęcia"
-          className="step-input"
-          onChange={(e) => setTempDate(e.target.value)}
-        />
-        <input
-          type="number"
-          id="duration"
-          placeholder="Czas trwania"
-          className="step-input"
-          onChange={(e) => setTempDuration(e.target.value)}
-        />
-        <button
-          className="btn"
-          onClick={(e) => {
-            e.preventDefault();
-            if (tempName === "" || tempDate==="" || tempDuration<0) {
-              setError("Pola nie mogą być puste");
-              return;
-            } else {
-              setStep(tempName,tempDate,tempDuration);
-            }
-          }}
-        >
-          Zatwierdź
-        </button>
-      </div>
-    </div>
+        </label>
+        <label className="field" htmlFor="custom-date">
+          Początek
+          <input
+            id="custom-date"
+            type="datetime-local"
+            value={tempDate}
+            onChange={(e) => setTempDate(e.target.value)}
+          />
+        </label>
+        <label className="field" htmlFor="custom-duration">
+          Czas trwania (minuty)
+          <input
+            id="custom-duration"
+            type="number"
+            min="1"
+            placeholder="90"
+            value={tempDuration}
+            onChange={(e) => setTempDuration(e.target.value)}
+          />
+        </label>
+        {error && <p className="form-error">{error}</p>}
+        <Button className="primary w-full" type="submit" text="Dodaj etap" />
+      </form>
+    </Modal>
   );
 }

@@ -1,11 +1,8 @@
-export default function Stat({ iconPath, name, value }) {
+export default function Stat({ label, value }) {
   return (
-    <div className="flex flex-col gap-1 p-2 rounded-2xl w-full">
-      <p className="small text-[var(--color-dark-gray)]">{name}</p>
-      <div className="flex flex-row items-center gap-3">
-        <img className="w-7 min-w-[24px]" src={iconPath} alt={`${name} icon`} />
-        <h6 className="text-[var(--color-black)]">{value}</h6>
-      </div>
+    <div className="min-w-0">
+      <p className="small">{label}</p>
+      <p className="mt-1 text-sm font-medium leading-tight tabular-nums">{value}</p>
     </div>
   );
 }

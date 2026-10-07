@@ -1,64 +1,55 @@
+"use client";
+
 import { useState } from "react";
 import Button from "@/components/Button";
+import Modal from "@/components/Modal";
 
 export default function AddProjectModal({ setName, closeModal }) {
   const [tempName, setTempName] = useState("");
   const [error, setError] = useState("");
   const [tempRate, setTempRate] = useState(50);
 
-  return (
-    <div className="modal-container">
-      <div className="modal">
-        <svg onClick={()=>closeModal()}
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="close"
-        >
-          <path
-            d="M18 2L10 10M2 18L10 10M10 10L18 18L2 2"
-            stroke="#F300D2"
-            strokeWidth="3"
-            strokeLinejoin="bevel"
-          />
-        </svg>
+  function submit(event) {
+    event.preventDefault();
+    if (tempName.trim() === "") {
+      setError("Nazwa nie może być pusta.");
+      return;
+    }
+    const rate = Number(tempRate);
+    setName(tempName.trim(), Number.isFinite(rate) ? rate : 50);
+    closeModal();
+  }
 
-        <h2>Dodaj projekt</h2>
-        {error !== "" && <p>{error}</p>}
-        <div className="inputs">
-          <label htmlFor="name">Nazwa</label>
+  return (
+    <Modal title="Nowy projekt" onClose={closeModal}>
+      <form className="form-stack" onSubmit={submit}>
+        <label className="field" htmlFor="project-name">
+          Nazwa
           <input
+            id="project-name"
             type="text"
             name="name"
-            placeholder="Nazwa"
+            placeholder="Np. strona dla Kowalskiego"
+            value={tempName}
             onChange={(e) => setTempName(e.target.value)}
           />
-          <label htmlFor="rate">Stawka <span className="small">(domyślnie 50)</span></label>
+        </label>
+        <label className="field" htmlFor="project-rate">
+          Stawka godzinowa
           <input
+            id="project-rate"
             type="number"
             name="rate"
-            placeholder="Stawka"
+            min="0"
+            placeholder="50"
+            value={tempRate}
             onChange={(e) => setTempRate(e.target.value)}
           />
-        </div>
-
-        <Button
-          className="primary"
-          onClick={(e) => {
-            e.preventDefault();
-            if (tempName === "") {
-              setError("Nazwa nie może być pusta");
-              return;
-            } else {
-              setName(tempName, tempRate);
-              closeModal();
-            }
-          }}
-          text="Zatwierdź"
-        ></Button>
-      </div>
-    </div>
+        </label>
+        <p className="text-sm text-[var(--muted)]">Domyślnie 50 PLN za godzinę.</p>
+        {error && <p className="form-error">{error}</p>}
+        <Button className="primary w-full" type="submit" text="Utwórz projekt" />
+      </form>
+    </Modal>
   );
 }

@@ -1,8 +1,10 @@
+"use client";
+
 import React, { useState, useEffect, useRef } from "react";
 import AddFormModal from "./AddFormModal";
-import Button from "../../Button";
 import formatTime from "../../../js/formatTime";
 import addHoursToDate from "@/js/addHoursToDate";
+import { IconPlay, IconStop } from "../../Icons";
 
 export default function StepForm({ addStep, projectId, rate }) {
   const [startTime, setStartTime] = useState(new Date());
@@ -16,9 +18,7 @@ export default function StepForm({ addStep, projectId, rate }) {
     if (isTimerRunning) {
       intervalRef.current = setInterval(() => {
         const now = new Date();
-        const secondsElapsed = Math.floor(
-          (now.getTime() - startTime.getTime()) / 1000
-        );
+        const secondsElapsed = Math.floor((now.getTime() - startTime.getTime()) / 1000);
         setTimer(secondsElapsed);
       }, 1000);
     } else {
@@ -42,7 +42,7 @@ export default function StepForm({ addStep, projectId, rate }) {
   function handleModalClose(name) {
     if (name) {
       setIsTimerRunning(false);
-      const duration = (timer / 3600).toFixed(2) * 1; // czas w godzinach
+      const duration = (timer / 3600).toFixed(2) * 1;
       const endTime = addHoursToDate(startTime, duration);
       const step = {
         project_id: projectId,
@@ -66,64 +66,30 @@ export default function StepForm({ addStep, projectId, rate }) {
     }
   }
 
-  return (
-    <div className="flex flex-col items-center justify-center gap-6 h-full">
-      <div className="min-w-[250px] max-w-[35vw] min-h-[250px] flex flex-col items-center justify-center aspect-square relative">
-        <svg
-          className="absolute top-0 left-0 w-full h-full"
-          width="386"
-          height="406"
-          viewBox="0 0 406 406"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            className="w-full h-full"
-            rx="193"
-            stroke="#4A4A46"
-            strokeWidth="20"
-            strokeDasharray="5 25"
-          />
-        </svg>
+  const showTime = isTimerRunning || isModalOpen;
 
-        <h2>{isTimerRunning || isModalOpen ? formatTime(timer) : "00:00"}</h2>
-      </div>
-      <form className="step-form w-fit">
+  return (
+    <div className="flex w-full flex-col items-center">
+      <div className={`timer ${isTimerRunning ? "is-running" : ""}`}>
+        <p className="timer-meta">{isTimerRunning ? "W trakcie" : "Gotowy"}</p>
+        <h2 className="timer-readout">{showTime ? formatTime(timer) : "00:00"}</h2>
         <button
-          className="w-20 h-16 [filter:drop-shadow(3px_2px_0_var(--color-gray))]"
+          type="button"
+          className="timer-toggle"
           onClick={handleTimerToggle}
+          aria-label={isTimerRunning ? "Zatrzymaj licznik" : "Uruchom licznik"}
         >
-          <div
-            className="w-20 h-full bg-contain bg-no-repeat bg-center"
-            style={{
-              backgroundImage: `url('${
-                isTimerRunning ? "/stop.svg" : "/play.svg"
-              }')`,
-            }}
-          ></div>{" "}
+          {isTimerRunning ? <IconStop /> : <IconPlay />}
         </button>
-        {isModalOpen && (
-          <AddFormModal
-            setName={(name) => handleModalClose(name)}
-            closeModal={() => setIsModalOpen(false)}
-          />
-        )}
-      </form>
-      <div className="flex flex-row justify-between gap-4">
-        {isTimerRunning && (
-          <div className="flex flex-col">
-            <p className="small text-[var(--color-dark-gray)]">
-              Godzina rozpoczęcia{" "}
-            </p>
-            <h6>
-              {startTime.toLocaleString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </h6>
-          </div>
-        )}
+        <p className="timer-meta">
+          {isTimerRunning && startTime
+            ? `Start ${startTime.toLocaleTimeString("pl-PL", { hour: "2-digit", minute: "2-digit" })}`
+            : ""}
+        </p>
       </div>
+      {isModalOpen && (
+        <AddFormModal setName={(name) => handleModalClose(name)} closeModal={() => setIsModalOpen(false)} />
+      )}
     </div>
   );
 }

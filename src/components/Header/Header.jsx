@@ -1,57 +1,63 @@
 "use client";
-import Link from "next/link";
-import Button from "../Button";
-import { useUser } from "@/app/UserContext";
 
-export default function Header() {
-  const  user  = useUser();
-  const userSvg = (
-    <svg
-      width="43"
-      height="43"
-      viewBox="0 0 43 43"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className=" fill-[var(--color-white)] stroke-[var(--color-white)]"
-    >
-      <path
-        d="M35.345 36.6344C34.5284 34.3486 32.7289 32.3287 30.2257 30.8881C27.7224 29.4475 24.6553 28.6667 21.5001 28.6667C18.3448 28.6667 15.2777 29.4475 12.7745 30.8881C10.2713 32.3287 8.47179 34.3486 7.65515 36.6344"
-        stroke="#33363F"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <circle
-        cx="21.4999"
-        cy="14.3334"
-        r="7.16667"
-        stroke="#33363F"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useUser } from "@/app/UserContext";
+import { IconMoon, IconSun, IconUser } from "../Icons";
+
+function ThemeToggle() {
+  function toggleTheme() {
+    const current =
+      document.documentElement.getAttribute("data-theme") ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const next = current === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+  }
 
   return (
-    <div className="sticky w-full pt-3">
-    <header className="text-[var(--color-white)] z-10 flex w-fit min-w-[350px] max-w-full justify-between flex-row py-2  rounded-2xl m-auto px-6 bg-[var(--color-black)] shadow-2xl items-center">
-      <Link href="/">
-        <span className="text-xl font-bold">WorkTrack</span>
-      </Link>
+    <button type="button" className="icon-btn" onClick={toggleTheme} aria-label="Zmień motyw">
+      <span className="theme-icon theme-icon-moon">
+        <IconMoon />
+      </span>
+      <span className="theme-icon theme-icon-sun">
+        <IconSun />
+      </span>
+    </button>
+  );
+}
 
-        <Link href="/projekty">Projekty</Link>
+export default function Header() {
+  const user = useUser();
+  const pathname = usePathname();
 
-        {user ? (
-          <Link href="/profil">{userSvg}</Link>
-        ) : (
-          <Link href="/login">
-            <Button text="Zaloguj się" className="primary" />
+  if (pathname === "/login") return null;
+
+  const projectsActive = pathname.startsWith("/projekty");
+
+  return (
+    <header className="site-header">
+      <div className="shell flex h-full items-center justify-between gap-3">
+        <Link href="/" className="brand">
+          WorkTrack
+        </Link>
+
+        <div className="flex items-center gap-1 sm:gap-2">
+          <Link href="/projekty" className={`nav-link ${projectsActive ? "is-active" : ""}`}>
+            Projekty
           </Link>
-        )}
-        
-
-   
+          <ThemeToggle />
+          {user ? (
+            <Link href="/profil" className="profile-dot" aria-label="Profil">
+              <IconUser />
+            </Link>
+          ) : (
+            <Link href="/login" className="btn btn-primary h-9 px-3">
+              Zaloguj
+            </Link>
+          )}
+        </div>
+      </div>
     </header>
-    </div>
-    
   );
 }

@@ -20,11 +20,12 @@ export default function SignUpForm({ onSwitch }) {
     }
     if (email === "") {
       setError("Nieprawidłowy adres email.");
+      return;
     }
     setError(null);
     setSuccess(null);
 
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
     });
@@ -40,43 +41,50 @@ export default function SignUpForm({ onSwitch }) {
   };
 
   return (
-    <div className="login-wrapper">
-      <div className="login-form">
-        <form onSubmit={handleSignUp}>
-          <h2 className="text-center">Utwórz konto</h2>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email">Twój email</label>
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              name="email"
-              type="email"
-              placeholder="Twój email"
-              required
+    <div className="grid min-h-dvh md:grid-cols-2">
+      <div className="flex items-center justify-center px-6 py-16">
+        <form onSubmit={handleSignUp} className="flex w-full max-w-[400px] flex-col gap-6">
+          <div>
+            <p className="small">Konto</p>
+            <h1 className="mt-2">Utwórz konto</h1>
+            <p className="mt-2 text-sm text-[var(--muted)]">Kilka sekund i możesz mierzyć pracę.</p>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <label className="field" htmlFor="signup-email">
+              Email
+              <input
+                id="signup-email"
+                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                type="email"
+                placeholder="jan@firma.pl"
+                autoComplete="email"
+                required
+              />
+            </label>
+            <PasswordInput
+              name="new-password"
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
             />
-
-            <PasswordInput onChange={(e) => setPassword(e.target.value)} />
-
             <PasswordInput
               name="checkPassword"
               onChange={(e) => setCheckPassword(e.target.value)}
-              placeholder="Hasło"
+              placeholder="Powtórz hasło"
               label="Powtórz hasło"
+              autoComplete="new-password"
             />
           </div>
-          {error && <p className="text-[var(--color-error)]">{error}</p>}
-          {success && <p className="text-[var(--color-success)]">{success}</p>}
-          <Button
-            className="primary"
-            type="submit"
-            text="Zarejestruj się"
-          ></Button>
-          <p className="text-center">
-            <span className="text-gray-600">Masz już konto?</span>{" "}
-            <button
-              className="link"
-              type="button"
-              onClick={() => onSwitch("login")}
-            >
+
+          {error && <p className="form-error">{error}</p>}
+          {success && <p className="form-success">{success}</p>}
+
+          <Button className="primary w-full" type="submit" text="Zarejestruj się" />
+
+          <p className="text-sm text-[var(--muted)]">
+            Masz już konto?{" "}
+            <button className="link" type="button" onClick={() => onSwitch("login")}>
               Zaloguj się
             </button>
           </p>
@@ -84,7 +92,7 @@ export default function SignUpForm({ onSwitch }) {
       </div>
       <SideWrapper
         heading="Przyspiesz i zorganizuj swoją pracę."
-        rotate={true}
+        text="Jedno miejsce na projekty, licznik i to, ile już zarobiłeś."
       />
     </div>
   );

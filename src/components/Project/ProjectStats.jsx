@@ -1,8 +1,11 @@
 import Link from "next/link";
 import formatDate from "@/js/formatDate";
 import displayHours from "@/js/displayHours";
+import formatMoney from "@/js/formatMoney";
 import Switch from "../Switch";
-export default function ProjectStats({ project, onClickSwitch, steps = [] , showMonthly}) {
+import { IconChevronLeft } from "../Icons";
+
+export default function ProjectStats({ project, onClickSwitch, steps = [], showMonthly }) {
   let monthlySalary = 0;
   let monthlyTime = 0;
   if (steps.length > 0) {
@@ -11,53 +14,47 @@ export default function ProjectStats({ project, onClickSwitch, steps = [] , show
       monthlySalary += step.salary;
     });
   }
+
+  const salary = showMonthly ? monthlySalary : project.salary;
+  const time = showMonthly ? monthlyTime : project.duration;
+
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-row justify-between">
-        <Link className="link" href={`/projekty`}>
-          {"<"}-- Wszystkie projekty
-        </Link>
-        <div className="flex flex-col items-end gap-2">
-          <p className="small font-medium">Aktualny miesiąc</p>
-          <Switch onClick={onClickSwitch} />
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <Link className="back-link" href="/projekty">
+            <IconChevronLeft />
+            Wszystkie projekty
+          </Link>
+          <h1 className="mt-3 break-words">{project.name}</h1>
+          <p className="mt-2 text-sm text-[var(--muted)]">Od {formatDate(project.creation_date)}</p>
+        </div>
+        <div className="flex items-center gap-3 sm:pt-1">
+          <p className="small">{showMonthly ? "Ten miesiąc" : "Całość"}</p>
+          <Switch
+            on={showMonthly}
+            onClick={onClickSwitch}
+            label="Pokaż tylko aktualny miesiąc"
+          />
         </div>
       </div>
-      <h3>{project.name}</h3>
-      <div className="flex flex-row gap-8 overflow-auto ">
-        <div className="stat min-w-40">
-          <p className="small text-[var(--color-dark-gray)]">
-            Data rozpoczęcia projektu
-          </p>
-          <h6 className="text-[var(--color-primary-1-darker)]">
-            {formatDate(project.creation_date)}
-          </h6>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-xl bg-[var(--surface-2)] px-4 py-3">
+          <p className="small">Wynagrodzenie</p>
+          <p className="stat-strong">{formatMoney(salary)} zł</p>
         </div>
-        <div className="stat min-w-40">
-          <p className="small text-[var(--color-dark-gray)]">
-            Data ostatniego etapu
-          </p>
-          <h6 className="text-[var(--color-primary-1-darker)]">
-            {project.last_step ? formatDate(project.last_step) : "Brak etapów"}
-          </h6>
-          <h6 className="text-[var(--color-primary-1-darker)]"></h6>
+        <div className="rounded-xl bg-[var(--surface-2)] px-4 py-3">
+          <p className="small">Czas pracy</p>
+          <p className="stat-strong">{displayHours(time)}</p>
         </div>
-        <div className="stat min-w-40">
-          <p className="small text-[var(--color-dark-gray)]">Stawka </p>
-          <h6 className="text-[var(--color-primary-1-darker)]">
-            {project.rate} PLN / H
-          </h6>
+        <div className="rounded-xl bg-[var(--surface-2)] px-4 py-3">
+          <p className="small">Stawka</p>
+          <p className="stat-plain">{formatMoney(project.rate)} zł/h</p>
         </div>
-        <div className="stat min-w-40">
-          <p className="small text-[var(--color-dark-gray)]">Wynagrodzenie</p>
-          <h4 className="text-[var(--color-secondary)]">
-            {showMonthly ? monthlySalary : project.salary} PLN
-          </h4>
-        </div>
-        <div className="stat min-w-40">
-          <p className="small text-[var(--color-dark-gray)]">Czas pracy</p>
-          <h4 className="text-[var(--color-secondary)]">
-            {showMonthly ? displayHours(monthlyTime) : displayHours(project.duration)}
-          </h4>
+        <div className="rounded-xl bg-[var(--surface-2)] px-4 py-3">
+          <p className="small">Ostatni etap</p>
+          <p className="stat-plain">{project.last_step ? formatDate(project.last_step) : "Brak"}</p>
         </div>
       </div>
     </div>
