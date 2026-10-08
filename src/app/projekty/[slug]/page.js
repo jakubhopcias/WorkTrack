@@ -1,5 +1,4 @@
 "use client";
-import calculateSalary from "@/js/calculateSalary";
 import ProjectStats from "@/components/Project/ProjectStats";
 import RateForm from "@/components/Project/RateForm";
 import Step from "@/components/Project/StepForm/StepForm";
